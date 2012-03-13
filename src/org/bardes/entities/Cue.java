@@ -12,13 +12,39 @@ import static javax.persistence.CascadeType.ALL;
 import javax.persistence.JoinColumn;
 
 @Entity
-@Table(name="cues")
-public class Cue 
-{
+@Table(name = "cues")
+public class Cue {
 	@Id
-	@Column(name="cue")
+	@Column(name = "cue")
 	BigDecimal cue;
-	
+
+	@Column(length = 200)
+	String description;
+
+	public BigDecimal getCue() {
+		return cue;
+	}
+
+	public void setCue(BigDecimal cue) {
+		this.cue = cue;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public List<Slide> getSlides() {
+		return slides;
+	}
+
+	public void setSlides(List<Slide> slides) {
+		this.slides = slides;
+	}
+
 	@OneToMany(cascade = ALL)
 	@JoinColumn
 	List<Slide> slides;

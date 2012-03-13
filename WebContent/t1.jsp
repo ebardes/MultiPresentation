@@ -1,6 +1,4 @@
-<%@page import="org.bardes.html.*" %>
-<%
-WSS wss = WSS.getInstance();
-
-wss.send("001", request.getParameter("msg"));
+<%@page import="org.bardes.state.*" %><%
+	DB db = new DB();
+	out.print(db.getCues());
 %>
