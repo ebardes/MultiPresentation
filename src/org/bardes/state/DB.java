@@ -20,9 +20,22 @@ public class DB
 	
 	public DB()
 	{
-		Map<String,Object> env = new HashMap<String, Object>();
-		env.put("eclipselink.ddl-generation", "create-tables");
+		init(null);
+	}
+	
+	public void init(Map<String,Object> env)
+	{
 		entityManagerFactory = Persistence.createEntityManagerFactory(PERSISTENCE_NAME, env);
+	}
+	
+	public DB(boolean reset)
+	{
+		Map<String,Object> env = new HashMap<String, Object>();
+		if (reset)
+		{
+			env.put("eclipselink.ddl-generation", "drop-and-create-tables");
+		}
+		init(env);
 	}
 	
 	public List<Cue> getCues()
@@ -76,6 +89,20 @@ public class DB
 			em.merge(show);
 			
 			tx.commit();
+		}
+		finally
+		{
+			em.close();
+		}
+	}
+	
+	public Show getShow()
+	{
+		EntityManager em = entityManagerFactory.createEntityManager();
+		try
+		{
+			Show show = em.find(Show.class, new Integer(1));
+			return show;
 		}
 		finally
 		{
