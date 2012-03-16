@@ -16,16 +16,17 @@ import org.bardes.entities.Show;
 public class DB
 {
 	public static final String PERSISTENCE_NAME = "MultiPresentation";
-	private EntityManagerFactory entityManagerFactory;
+	private static EntityManagerFactory entityManagerFactory;
 	
 	public DB()
 	{
 		init(null);
 	}
 	
-	public void init(Map<String,Object> env)
+	public synchronized static void init(Map<String,Object> env)
 	{
-		entityManagerFactory = Persistence.createEntityManagerFactory(PERSISTENCE_NAME, env);
+		if (entityManagerFactory == null)
+			entityManagerFactory = Persistence.createEntityManagerFactory(PERSISTENCE_NAME, env);
 	}
 	
 	public DB(boolean reset)
@@ -41,7 +42,7 @@ public class DB
 	public List<Cue> getCues()
 	{
 		List<Cue> list = null;
-		EntityManager em = entityManagerFactory.createEntityManager();
+		EntityManager em = getEntityManager();
 		try
 		{
 			TypedQuery<Cue> q = em.createQuery("select c from Cue c order by c.cue", Cue.class);
@@ -54,9 +55,14 @@ public class DB
 		return list;
 	}
 
+	private synchronized EntityManager getEntityManager()
+	{
+		return entityManagerFactory.createEntityManager();
+	}
+
 	public void save(Cue c)
 	{
-		EntityManager em = entityManagerFactory.createEntityManager();
+		EntityManager em = getEntityManager();
 		try
 		{
 			EntityTransaction tx = em.getTransaction();
@@ -80,7 +86,7 @@ public class DB
 	
 	public void save(Show show)
 	{
-		EntityManager em = entityManagerFactory.createEntityManager();
+		EntityManager em = getEntityManager();
 		try
 		{
 			EntityTransaction tx = em.getTransaction();
@@ -98,7 +104,7 @@ public class DB
 	
 	public Show getShow()
 	{
-		EntityManager em = entityManagerFactory.createEntityManager();
+		EntityManager em = getEntityManager();
 		try
 		{
 			Show show = em.find(Show.class, new Integer(1));

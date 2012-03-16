@@ -1,56 +1,36 @@
 package org.bardes.state;
 
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
+import org.bardes.entities.Cue;
 import org.bardes.entities.Slide;
+import org.bardes.entities.Slide.Type;
 
 public class ProjectorState extends DisplayState 
 {
-	Lock lock = new ReentrantLock();
-	Condition changed = lock.newCondition(); 
+	private final int projectorId;
 	
-	private Slide currentSlide;
-	private long ping;
-
-	public Slide getCurrentSlide() 
+	public ProjectorState(int projectorId)
 	{
-		return currentSlide;
+		this.projectorId = projectorId;
 	}
 
-	public void setCurrentSlide(Slide currentSlide) 
+	@Override
+	public void goCue(Cue cue) 
 	{
-		lock.lock();
 		try
 		{
-			if (!this.currentSlide.equals(currentSlide))
-			{
-				changed.signal();
-			}
-			this.currentSlide = currentSlide;
+			Slide slide = cue.getSlide(projectorId);
+			if (slide == null || slide.getContentType() == Type.TRACKED)
+				return;
+			
+			if (sock != null)
+				sock.send("changeslide:q"+cue.getCue());
 		}
-		finally
+		catch (Exception e)
 		{
-			lock.unlock();
+			e.printStackTrace();
 		}
 	}
 	
-	public Slide waitForSlideChange(long wait) throws InterruptedException 
-	{
-		lock.lock();
-		try
-		{
-			changed.await(wait, TimeUnit.MILLISECONDS);
-		}
-		finally
-		{
-			lock.unlock();
-		}
-		return currentSlide;
-	}
-
 	@Override
 	public void onMessage(String message)
 	{
@@ -59,7 +39,6 @@ public class ProjectorState extends DisplayState
 		
 		if (message.startsWith("ping"))
 		{
-			this.ping = System.currentTimeMillis();
 		}
 	}
 }

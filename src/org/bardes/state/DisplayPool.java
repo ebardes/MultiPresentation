@@ -1,17 +1,27 @@
 package org.bardes.state;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.bardes.entities.Cue;
 import org.bardes.entities.Show;
 import org.bardes.html.WSS;
 
-public class DisplayPool 
+
+public class DisplayPool
 {
 	private static Map<String, DisplayState> projectors = new HashMap<String, DisplayState>();
 	private static ExecutorService threadPool = Executors.newCachedThreadPool();
+	
+	private static Show show;
+	private static List<Cue> cues;
+	
+	private static Cue currentCue = null;
+	private static Thread t;
 
 	public static DisplayState get(String projectorId)
 	{
@@ -20,19 +30,82 @@ public class DisplayPool
 
 	public static void startup()
 	{
-		WSS wss = WSS.getInstance();
-		DB db = new DB();
-		Show show = db.getShow();
+		t = new Thread(new Runnable() {
+
+			public void run()
+			{
+				WSS wss = WSS.getInstance();
+				DB db = new DB();
+				show = db.getShow();
+				
+				cues = db.getCues();
+				Collections.sort(cues);
+				
+				for (int i = 1; i < show.getMaxProjectors(); i++)
+				{
+					String uri = "/display/"+i;
+					
+					ProjectorState projectorState = new ProjectorState(i);
+					projectors.put(uri, projectorState);
+					threadPool.submit(projectorState);
+					
+					wss.registerDisplayStateCallback(uri, projectorState);
+				}
+				
+				t = null;
+			}
+		});
 		
-		for (int i = 1; i < show.getMaxProjectors(); i++)
+		t.start();
+	}
+	
+	public static void goCue(Cue cue)
+	{
+		currentCue = cue;
+		if (projectors == null)
+			return;
+		
+		for (DisplayState d : projectors.values())
 		{
-			String uri = "/display/"+i;
-			
-			ProjectorState projectorState = new ProjectorState();
-			projectors.put(uri, projectorState);
-			threadPool.submit(projectorState);
-			
-			wss.registerDisplayStateCallback(uri, projectorState);
+			d.goCue(cue);
 		}
+	}
+	
+	public static void goCue(String cue)
+	{
+		Cue x = new Cue();
+		x.setCue(cue);
+		
+		int n = cues.indexOf(x);
+		if (n >= 0)
+		{
+			x = cues.get(n);
+			goCue(x);
+		}
+	}
+	
+	public static Cue go()
+	{
+		if (cues == null || cues.size() == 0)
+			return null;
+		
+		if (currentCue == null)
+		{
+			goCue(cues.get(0));
+		}
+		else
+		{
+			int n = cues.indexOf(currentCue);
+			if (n+1 < cues.size())
+			{
+				goCue(cues.get(n+1));
+			}
+		}
+		return currentCue;
+	}
+	
+	public static void join() throws InterruptedException
+	{
+		t.join();
 	}
 }

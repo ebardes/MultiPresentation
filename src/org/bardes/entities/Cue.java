@@ -15,7 +15,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "cues")
-public class Cue
+public class Cue implements Comparable<Cue>
 {
 	@Id
 	@Column(name = "cue", precision=8, scale=2)
@@ -74,5 +74,23 @@ public class Cue
 			return null;
 		
 		return slides.get(projector);
+	}
+
+	@Override
+	public int compareTo(Cue o)
+	{
+		return cue.compareTo(o.cue);
+	}
+	
+	@Override
+	public boolean equals(Object obj)
+	{
+		return cue.equals(((Cue)obj).cue);
+	}
+	
+	@Override
+	public int hashCode()
+	{
+		return cue.hashCode();
 	}
 }

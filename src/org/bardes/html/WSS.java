@@ -43,11 +43,27 @@ public class WSS extends WebSocketServer
 	@Override
 	public void onClose(WebSocket sock, int arg1, String arg2, boolean arg3) 
 	{
+		DisplayState state = getDisplayState(sock);
+		if (state != null)
+		{
+			state.close();
+		}
 	}
 
 	@Override
 	public void onError(WebSocket sock, Exception ex)
 	{
+		if (sock == null)
+		{
+			ex.printStackTrace();
+			return;
+		}
+		
+		DisplayState state = getDisplayState(sock);
+		if (state != null)
+		{
+			state.error();
+		}
 	}
 
 	@Override
@@ -56,6 +72,7 @@ public class WSS extends WebSocketServer
 		DisplayState state = getDisplayState(sock);
 		if (state != null)
 		{
+			state.sock = sock;
 			state.message(msg);
 		}
 	}
@@ -68,6 +85,12 @@ public class WSS extends WebSocketServer
 		
 		addresses.put(sockAddr, value);
 		sockets.put(value, sock);
+		
+		DisplayState state = getDisplayState(sock);
+		if (state != null)
+		{
+			state.sock = sock;
+		}
 	}
 
 	public static WSS getInstance()
