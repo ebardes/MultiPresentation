@@ -7,12 +7,13 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import org.bardes.entities.Slide;
 
-public class ProjectorState 
+public class ProjectorState extends DisplayState 
 {
 	Lock lock = new ReentrantLock();
 	Condition changed = lock.newCondition(); 
 	
 	private Slide currentSlide;
+	private long ping;
 
 	public Slide getCurrentSlide() 
 	{
@@ -48,5 +49,17 @@ public class ProjectorState
 			lock.unlock();
 		}
 		return currentSlide;
+	}
+
+	@Override
+	public void onMessage(String message)
+	{
+		if (message == null)
+			return;
+		
+		if (message.startsWith("ping"))
+		{
+			this.ping = System.currentTimeMillis();
+		}
 	}
 }

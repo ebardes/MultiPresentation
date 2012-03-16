@@ -5,6 +5,8 @@ a:active {text-decoration:underline;}
 
 body {
 	background: black;
+	color: white;
+	font-family: Optima;
 	margin: 0;
 }
 

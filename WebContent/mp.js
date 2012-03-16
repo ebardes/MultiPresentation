@@ -1,19 +1,22 @@
 var timerId;
+var currentCue = '';
 
-function timedFunc() {
-	var url = '/MultiPresentation/AJAX1';
-
-	new Ajax.Request(url, {
-		method : 'get',
-		evalJSON: true,
-		onSuccess : function(transport) {
-			var notice = $('items');
-			var z = transport.responseText.evalJSON();
-			notice.innerHTML = z.date;
-		}
-	});
+function timedFunc() 
+{
+	if(document.ws)
+	{
+		document.ws.send('ping:'+currentCue);
+	}
 }
 
-function onLoad() {
-	timerId = setInterval(timedFunc, 2000);
+function onLiveLoad(url)
+{
+	var ws = new WebSocket(url);
+	document.ws = ws;
+	
+	ws.onmessage = function() {
+		
+	};
+	
+	timerId = setInterval(timedFunc, 20000);
 }

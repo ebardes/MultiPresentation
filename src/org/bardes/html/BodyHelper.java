@@ -1,20 +1,20 @@
 package org.bardes.html;
 
 import java.io.IOException;
+import java.net.URI;
 
 import javax.servlet.http.HttpServletRequest;
+
+import org.bardes.entities.Show;
+import org.bardes.entities.Slide;
 
 public class BodyHelper
 {
 	private final HttpServletRequest req;
-	private String projector;
-	private String slide;
 
 	public BodyHelper(HttpServletRequest req)
 	{
 		this.req = req;
-		projector = req.getParameter("projector");
-		slide = req.getParameter("slide");
 	}
 	
 	public CharSequence body()
@@ -22,17 +22,21 @@ public class BodyHelper
 		return new java.util.Date().toString();
 	}
 	
-	public CharSequence getContentLink()
+	public CharSequence slideContent(Slide slide, Show show)
 	{
-		return "<img src=\"pages/Untitled."+slide+".png\" />";
+		StringBuilder sb = new StringBuilder();
+		URI url = URI.create(show.getBaseURL());
+		
+		switch (slide.getContentType())
+		{
+		case IMAGE:
+			URI href = url.resolve(slide.getContentFile());
+			sb.append("<img href=\""+href+"\" />");
+		}
+		return sb;
 	}
 	
-	public CharSequence getTransitionHeader()
-	{
-		return "body { -webkit-transition: opacity 3s linear; }";
-	}
-	
-	public String webSocketURL() throws IOException
+	public String webDisplaySocketURL() throws IOException
 	{
 		WSS wss = WSS.getInstance();
 		int port = wss.getPort();
@@ -40,7 +44,7 @@ public class BodyHelper
 		String url = "ws://" +
 				req.getServerName() +
 				":" + port +
-				"/" + req.getParameter("projectorId");
+				"/display/" + req.getParameter("projectorId");
 		
 		return url;
 	}
