@@ -2,46 +2,65 @@ package org.bardes.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="slides")
-public class Slide 
+@Table(name = "slides")
+public class Slide
 {
+	public static enum Type
+	{
+		TRACKED, BLANK, IMAGE, MOVIE 
+	}
+	
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue
 	int id;
+
+	@Column
+	@Enumerated(EnumType.ORDINAL)
+	Type contentType;
+
+	@Column(length = 255)
+	String contentFile;
 	
-	@Column(length=10)
-	String contentType;
+	@Override
+	public String toString()
+	{
+		return "("+contentType+","+contentFile+")";
+	}
 	
-	public int getId() {
+	public int getId()
+	{
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(int id)
+	{
 		this.id = id;
 	}
 
-	public String getContentType() {
+	public Type getContentType()
+	{
 		return contentType;
 	}
 
-	public void setContentType(String contentType) {
+	public void setContentType(Type contentType)
+	{
 		this.contentType = contentType;
 	}
 
-	public String getContentFile() {
+	public String getContentFile()
+	{
 		return contentFile;
 	}
 
-	public void setContentFile(String contentFile) {
+	public void setContentFile(String contentFile)
+	{
 		this.contentFile = contentFile;
 	}
-
-	@Column(length=255)
-	String contentFile;
 }

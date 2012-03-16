@@ -6,10 +6,12 @@ import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 
 import org.bardes.entities.Cue;
+import org.bardes.entities.Show;
 
 public class DB
 {
@@ -37,5 +39,47 @@ public class DB
 			em.close();
 		}
 		return list;
+	}
+
+	public void save(Cue c)
+	{
+		EntityManager em = entityManagerFactory.createEntityManager();
+		try
+		{
+			EntityTransaction tx = em.getTransaction();
+			tx.begin();
+			
+			Cue x = em.find(Cue.class, c.getCue());
+			if (x != null)
+			{
+				em.remove(x);
+				em.flush();
+			}
+			em.merge(c);
+			
+			tx.commit();
+		}
+		finally
+		{
+			em.close();
+		}
+	}
+	
+	public void save(Show show)
+	{
+		EntityManager em = entityManagerFactory.createEntityManager();
+		try
+		{
+			EntityTransaction tx = em.getTransaction();
+			tx.begin();
+			
+			em.merge(show);
+			
+			tx.commit();
+		}
+		finally
+		{
+			em.close();
+		}
 	}
 }
