@@ -1,5 +1,6 @@
 package org.bardes.state;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -100,6 +101,12 @@ public class DB
 		{
 			em.close();
 		}
+	}
+	
+	public void save(Collection<Cue> cues)
+	{
+		for (Cue c : cues)
+			save(c);
 	}
 	
 	public Show getShow()

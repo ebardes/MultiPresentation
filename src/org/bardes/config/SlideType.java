@@ -1,6 +1,8 @@
 package org.bardes.config;
 
+import org.bardes.entities.Slide;
+
 public interface SlideType
 {
-	String getType();
+	Slide.Type getType();
 }

@@ -26,7 +26,6 @@ public class DefCue
 		for (Object id : allIds)
 		{
 			Slide slide = new Slide();
-			slide.setProjector(String.valueOf(id)); 
 					
 			Object value = obj.get(id);
 			if (value instanceof SlideType)
@@ -36,7 +35,7 @@ public class DefCue
 			}
 			System.out.println("  " + id + ": " + slide);
 			
-			cue.addSlide(id.toString(), slide);
+			cue.setSlide(Integer.parseInt(id.toString()), slide);
 		}
 		
 		return cues;
