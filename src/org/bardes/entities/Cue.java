@@ -1,6 +1,5 @@
 package org.bardes.entities;
 
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,7 +18,7 @@ public class Cue implements Comparable<Cue>
 {
 	@Id
 	@Column(name = "cue", precision=8, scale=2)
-	BigDecimal cue;
+	Double cue;
 
 	@Column(length = 200)
 	String description;
@@ -35,12 +34,12 @@ public class Cue implements Comparable<Cue>
 		return "("+cue.toString() + slides+")";
 	}
 	
-	public BigDecimal getCue()
+	public Double getCue()
 	{
 		return cue;
 	}
 
-	public void setCue(BigDecimal cue)
+	public void setCue(Double cue)
 	{
 		this.cue = cue;
 	}
@@ -57,7 +56,7 @@ public class Cue implements Comparable<Cue>
 
 	public void setCue(String n)
 	{
-		setCue(new BigDecimal(n));
+		setCue(Double.valueOf(n));
 	}
 
 	public void setSlide(int projector, Slide slide)

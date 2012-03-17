@@ -1,14 +1,14 @@
 package org.bardes.state;
 
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import org.bardes.entities.Cue;
 import org.java_websocket.WebSocket;
 
 public abstract class DisplayState implements Runnable
 {
-	protected BlockingQueue<String> messages = new SynchronousQueue<String>();
+	protected BlockingQueue<String> messages = new LinkedBlockingQueue<String>();
 	
 	public WebSocket sock;
 
@@ -23,6 +23,7 @@ public abstract class DisplayState implements Runnable
 	@Override
 	public void run()
 	{
+		Thread.currentThread().setDaemon(true);
 		for (;;)
 		{
 			try
@@ -55,4 +56,10 @@ public abstract class DisplayState implements Runnable
 	}
 
 	public abstract void goCue(Cue cue);
+
+	public void shutdown()
+	{
+		// TODO Auto-generated method stub
+		
+	}
 }

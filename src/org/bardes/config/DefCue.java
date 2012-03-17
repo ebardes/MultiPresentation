@@ -1,6 +1,5 @@
 package org.bardes.config;
 
-import java.math.BigDecimal;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -18,7 +17,7 @@ public class DefCue
 		Object[] allIds = obj.getAllIds();
 		
 		Cue cue = new Cue();
-		cue.setCue(new BigDecimal(cueName));
+		cue.setCue(cueName);
 		cues.add(cue);
 		
 		System.out.println("Define cue " + cue);

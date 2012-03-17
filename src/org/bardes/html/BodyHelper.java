@@ -31,7 +31,7 @@ public class BodyHelper
 		{
 		case IMAGE:
 			URI href = url.resolve(slide.getContentFile());
-			sb.append("<img href=\""+href+"\" />");
+			sb.append("<img src=\""+href+"\" />");
 		}
 		return sb;
 	}

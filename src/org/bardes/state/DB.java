@@ -30,6 +30,11 @@ public class DB
 			entityManagerFactory = Persistence.createEntityManagerFactory(PERSISTENCE_NAME, env);
 	}
 	
+	public static void close()
+	{
+		entityManagerFactory = null;
+	}
+	
 	public DB(boolean reset)
 	{
 		Map<String,Object> env = new HashMap<String, Object>();

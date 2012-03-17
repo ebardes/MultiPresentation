@@ -34,6 +34,16 @@ public class DisplayPool
 
 			public void run()
 			{
+				try
+				{
+					Thread.sleep(10000);
+				}
+				catch (InterruptedException e)
+				{
+					e.printStackTrace();
+					return;
+				}
+				
 				WSS wss = WSS.getInstance();
 				DB db = new DB();
 				show = db.getShow();
@@ -107,5 +117,17 @@ public class DisplayPool
 	public static void join() throws InterruptedException
 	{
 		t.join();
+	}
+
+	public static void shutdown()
+	{
+		WSS wss = WSS.getInstance();
+		wss.closeAll();
+		
+		for (DisplayState s : projectors.values())
+		{
+			s.shutdown();
+		}
+		threadPool.shutdownNow();
 	}
 }

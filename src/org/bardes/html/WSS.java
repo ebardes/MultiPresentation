@@ -1,5 +1,6 @@
 package org.bardes.html;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -111,5 +112,23 @@ public class WSS extends WebSocketServer
 			WebSocket webSocket = wss.sockets.get(key);
 			webSocket.send(message);
 		}
+	}
+
+	public void closeAll()
+	{
+		for (WebSocket sock : connections())
+		{
+			sock.close(1);
+		}
+		
+		try
+		{
+			stop();
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		wss = null;
 	}
 }
