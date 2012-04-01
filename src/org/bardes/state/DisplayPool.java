@@ -130,4 +130,25 @@ public class DisplayPool
 		}
 		threadPool.shutdownNow();
 	}
+
+	public static void refresh()
+	{
+		DB db = new DB();
+		show = db.getShow();
+		
+		cues = db.getCues();
+		Collections.sort(cues);
+		
+		WSS wss = WSS.getInstance();
+		for (int projectorId = 1; projectorId <= show.getMaxProjectors(); projectorId++)
+		{
+			try
+			{
+				wss.sendDisplay(projectorId, "refresh");
+			}
+			catch (InterruptedException ignore)
+			{
+			}
+		}
+	}
 }

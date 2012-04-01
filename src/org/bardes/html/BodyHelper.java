@@ -25,13 +25,16 @@ public class BodyHelper
 	public CharSequence slideContent(Slide slide, Show show)
 	{
 		StringBuilder sb = new StringBuilder();
-		URI url = URI.create(show.getBaseURL());
+		String baseURL = show.getBaseURL();
+		if (!baseURL.endsWith("/"))
+			baseURL += "/";
+		URI url = URI.create(baseURL);
 		
 		switch (slide.getContentType())
 		{
 		case IMAGE:
 			URI href = url.resolve(slide.getContentFile());
-			sb.append("<img src=\""+href+"\" />");
+			sb.append("<img src=\""+href+"\" width=100% height=100% />");
 		}
 		return sb;
 	}
@@ -47,5 +50,27 @@ public class BodyHelper
 				"/display/" + req.getParameter("projectorId");
 		
 		return url;
+	}
+	
+	public String thumbnail(Slide slide, Show show)
+	{
+		String baseURL = show.getBaseURL();
+		if (!baseURL.endsWith("/"))
+			baseURL += "/";
+		URI url = URI.create(baseURL);
+		
+		switch (slide.getContentType())
+		{
+		case IMAGE:
+			URI href = url.resolve(slide.getContentFile());
+			return "<img src=\"" + href + "\" width=100% height=100% />";
+			
+		case BLANK:
+			return "Blank";
+			
+		case TRACKED:
+			return "&dArr;";
+		}
+		return "";
 	}
 }

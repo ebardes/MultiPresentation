@@ -91,6 +91,7 @@ public class WSS extends WebSocketServer
 		if (state != null)
 		{
 			state.sock = sock;
+			state.updateCue();
 		}
 	}
 

@@ -13,11 +13,14 @@ import javax.persistence.TypedQuery;
 
 import org.bardes.entities.Cue;
 import org.bardes.entities.Show;
+import org.bardes.entities.Slide;
+import org.bardes.entities.Slide.Type;
 
 public class DB
 {
 	public static final String PERSISTENCE_NAME = "MultiPresentation";
-	private static EntityManagerFactory entityManagerFactory;
+//	private static EntityManagerFactory entityManagerFactory;
+	private static Map<String, Object> env;
 	
 	public DB()
 	{
@@ -26,13 +29,14 @@ public class DB
 	
 	public synchronized static void init(Map<String,Object> env)
 	{
-		if (entityManagerFactory == null)
-			entityManagerFactory = Persistence.createEntityManagerFactory(PERSISTENCE_NAME, env);
+		DB.env = env;
+//		if (entityManagerFactory == null)
+//			entityManagerFactory = Persistence.createEntityManagerFactory(PERSISTENCE_NAME, env);
 	}
 	
 	public static void close()
 	{
-		entityManagerFactory = null;
+//		entityManagerFactory = null;
 	}
 	
 	public DB(boolean reset)
@@ -63,6 +67,7 @@ public class DB
 
 	private synchronized EntityManager getEntityManager()
 	{
+		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory(PERSISTENCE_NAME, env);
 		return entityManagerFactory.createEntityManager();
 	}
 
@@ -121,6 +126,58 @@ public class DB
 		{
 			Show show = em.find(Show.class, new Integer(1));
 			return show;
+		}
+		finally
+		{
+			em.close();
+		}
+	}
+
+	public Cue getCue(Double cueNum)
+	{
+		EntityManager em = getEntityManager();
+		try
+		{
+			Cue cue = em.find(Cue.class, cueNum);
+			if (cue == null)
+			{
+				cue = new Cue();
+				cue.setCue(cueNum);
+			}
+			return cue;
+		}
+		finally
+		{
+			em.close();
+		}
+	}
+
+	public void saveImage(Double cueNum, int displayNum, String fileName)
+	{
+		EntityManager em = getEntityManager();
+		try
+		{
+			Cue cue = em.find(Cue.class, cueNum);
+			if (cue == null)
+			{
+				cue = new Cue();
+				cue.setCue(cueNum);
+			}
+			
+			Slide slide = cue.getSlide(displayNum);
+			if (slide == null)
+			{
+				slide = new Slide();
+				cue.setSlide(displayNum, slide);
+			}
+			
+			slide.setContentFile(fileName);
+			slide.setContentType(Type.IMAGE);
+			
+			EntityTransaction tx = em.getTransaction();
+			tx.begin();
+			em.merge(cue);
+			tx.commit();
 		}
 		finally
 		{

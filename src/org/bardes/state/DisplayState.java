@@ -62,4 +62,6 @@ public abstract class DisplayState implements Runnable
 		// TODO Auto-generated method stub
 		
 	}
+
+	public abstract void updateCue();
 }

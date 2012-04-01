@@ -17,6 +17,19 @@ public class Show
 	@Column(name="base_url", length=250)
 	private String baseURL;
 	
+	@Column(name="upload_dir", length=250)
+	private String uploadDir;
+	
+	public String getUploadDir()
+	{
+		return uploadDir;
+	}
+
+	public void setUploadDir(String uploadDir)
+	{
+		this.uploadDir = uploadDir;
+	}
+
 	public int getMaxProjectors()
 	{
 		return maxProjectors;

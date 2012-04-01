@@ -38,10 +38,17 @@ function msg(e)
 			show(q);
 		} catch (e) {}
 		try {
-			hide(currentCue);
+			if (q != currentCue)
+				hide(currentCue);
 		} catch (e) {}
 		
 		currentCue = q;
+	}
+	if (e.data.startsWith('refresh'))
+	{
+		$('info').innerHTML = 'Refresh';
+		
+		history.go(0);
 	}
 }
 
@@ -54,4 +61,9 @@ function onLiveLoad(url)
 function goCue(cue)
 {
 	new Ajax.Request("go/"+cue);
+}
+
+function refresh(display)
+{
+	new Ajax.Request("refresh/"+display);
 }

@@ -19,3 +19,9 @@ div.slide {
 	left: 0;
 	top: 20px;
 }
+
+table.operator tr td {
+	text-align: center;
+	width: 133px;
+	height: 100px;
+}
