@@ -14,9 +14,6 @@ public class Show
 	@Column(name="max_projectors")
 	private	int maxProjectors;
 
-	@Column(name="base_url", length=250)
-	private String baseURL;
-	
 	@Column(name="upload_dir", length=250)
 	private String uploadDir;
 	
@@ -38,15 +35,5 @@ public class Show
 	public void setMaxProjectors(int maxProjectors)
 	{
 		this.maxProjectors = maxProjectors;
-	}
-
-	public String getBaseURL()
-	{
-		return baseURL;
-	}
-
-	public void setBaseURL(String baseURL)
-	{
-		this.baseURL = baseURL;
 	}
 }

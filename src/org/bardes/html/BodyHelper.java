@@ -5,7 +5,6 @@ import java.net.URI;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.bardes.entities.Show;
 import org.bardes.entities.Slide;
 
 public class BodyHelper
@@ -22,17 +21,16 @@ public class BodyHelper
 		return new java.util.Date().toString();
 	}
 	
-	public CharSequence slideContent(Slide slide, Show show)
+	public CharSequence slideContent(Slide slide)
 	{
 		StringBuilder sb = new StringBuilder();
-		String baseURL = show.getBaseURL();
-		if (!baseURL.endsWith("/"))
-			baseURL += "/";
+		String baseURL = req.getRequestURI();
 		URI url = URI.create(baseURL);
 		
 		switch (slide.getContentType())
 		{
 		case IMAGE:
+			url = url.resolve("slides/");
 			URI href = url.resolve(slide.getContentFile());
 			sb.append("<img src=\""+href+"\" width=100% height=100% />");
 		}
@@ -52,16 +50,15 @@ public class BodyHelper
 		return url;
 	}
 	
-	public String thumbnail(Slide slide, Show show)
+	public String thumbnail(Slide slide)
 	{
-		String baseURL = show.getBaseURL();
-		if (!baseURL.endsWith("/"))
-			baseURL += "/";
+		String baseURL = req.getRequestURI();
 		URI url = URI.create(baseURL);
 		
 		switch (slide.getContentType())
 		{
 		case IMAGE:
+			url = url.resolve("slides/");
 			URI href = url.resolve(slide.getContentFile());
 			return "<img src=\"" + href + "\" width=100% height=100% />";
 			

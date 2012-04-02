@@ -67,3 +67,12 @@ function refresh(display)
 {
 	new Ajax.Request("refresh/"+display);
 }
+
+function operatorKey(event)
+{
+	if (event.keyCode == 32) // spacebar
+	{
+		goCue('next');
+		event.bubbles = false;
+	}
+}

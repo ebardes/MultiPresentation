@@ -34,7 +34,7 @@ function show(id)
 	  
 	  String file = s.getContentFile();
 	  
-%><div id="q<%= q.getCue() %>" class="slide"><%= h.slideContent(s, show) %></div>
+%><div id="q<%= q.getCue() %>" class="slide"><%= h.slideContent(s) %></div>
 <% } %>
 </body>
 </html>

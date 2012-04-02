@@ -17,8 +17,6 @@ import org.junit.Test;
 
 public class DBCreation
 {
-	DB db = new DB(true);
-	
 //	@Test
 	public void jndiCreate() throws NamingException, SQLException
 	{
@@ -40,9 +38,11 @@ public class DBCreation
 	@Test
 	public void t1()
 	{
+		DB db = new DB(true);
+		
 		Show show = new Show();
 		show.setMaxProjectors(3);
-		show.setBaseURL("http://cmt.bardes.org/slidedata/");
+		show.setUploadDir("/slides");
 		
 		db.save(show);
 		
@@ -78,6 +78,8 @@ public class DBCreation
 	@Test
 	public void t2()
 	{
+		DB db = new DB();
+		
 		List<Cue> cues = db.getCues();
 		
 		System.out.println(cues);
