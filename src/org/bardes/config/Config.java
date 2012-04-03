@@ -11,7 +11,6 @@ import javax.naming.NamingException;
 import org.apache.derby.jdbc.ClientDataSource;
 import org.bardes.entities.Cue;
 import org.bardes.state.DB;
-import org.junit.Test;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.NativeJavaObject;
 import org.mozilla.javascript.Scriptable;
@@ -19,7 +18,6 @@ import org.mozilla.javascript.Scriptable;
 
 public class Config
 {
-	@Test
 	public void a() throws NamingException
 	{
 		InitialContext ic = new InitialContext();
@@ -34,7 +32,6 @@ public class Config
 		ic.bind("jdbc/__default", ds);
 	}
 	
-	@Test
 	public void f() throws IOException
 	{
 		Context cx = Context.enter();
@@ -74,6 +71,5 @@ public class Config
 			// Exit from the context.
 			Context.exit();
 		}
-		
 	}
 }

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<project default="war">
+	<property file="build.properties" />
+	
+	<property name="web.build" location="build/web"/>
+
+	<path id="libs">
+		<pathelement location="${junit.jar}" />
+		<pathelement location="binx" />
+
+		<fileset dir="WebContent/WEB-INF">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${glassfish}/lib">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<target name="build" depends="dirs">
+		<javac classpathref="libs" destdir="bin" srcdir="src" debug="true">
+		</javac>
+		<copy includeemptydirs="false" todir="bin">
+		    <fileset dir="src" includes="**/*.sql" />
+		</copy>
+	</target>
+
+	<target name="dirs">
+		<mkdir dir="bin"/>
+		<mkdir dir="build/classes"/>
+		<mkdir dir="${web.build}/WEB-INF/classes"/>
+	</target>
+
+	<target name="web" depends="build">
+		<copy includeemptydirs="false" todir="${web.build}">
+		    <fileset dir="WebContent" />
+		</copy>
+		<copy includeemptydirs="false" todir="${web.build}/WEB-INF/classes">
+		    <fileset dir="bin" />
+		</copy>
+	</target>
+
+	<target name="war" depends="web">
+		<jar jarfile="mp.war">
+			<fileset dir="${web.build}" />
+		</jar>
+	</target>
+
+</project>
