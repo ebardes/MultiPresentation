@@ -17,16 +17,16 @@ import org.junit.Test;
 
 public class DBCreation
 {
-//	@Test
+	@Test
 	public void jndiCreate() throws NamingException, SQLException
 	{
 		InitialContext ic = new InitialContext();
 		
 		ClientDataSource ds = new ClientDataSource();
-		ds.setDatabaseName("mp");
+		ds.setDatabaseName("/home/eric/mp");
 		ds.setUser("app");
 		ds.setPassword("app");
-		ds.setServerName("bardes.org");
+		ds.setServerName("congo.bardes.org");
 		ds.setConnectionAttributes(";create=true");
 		
 		Connection conn = ds.getConnection();
@@ -38,6 +38,8 @@ public class DBCreation
 	@Test
 	public void t1()
 	{
+		Cue c;
+		
 		DB db = new DB(true);
 		
 		Show show = new Show();
@@ -46,20 +48,6 @@ public class DBCreation
 		
 		db.save(show);
 		
-		Cue c = new Cue();
-		c.setCue("1.5");
-		c.setDescription("This is a test cue");
-		
-		Slide slide = new Slide();
-		slide.setContentType(Type.BLANK);
-		c.setSlide(1, slide);
-
-		slide = new Slide();
-		slide.setContentType(Type.IMAGE);
-		slide.setContentFile("image.001.png");
-		c.setSlide(2, slide);
-		
-		db.save(c);
 		
 		c = new Cue();
 		c.setCue("1");

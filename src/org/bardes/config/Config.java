@@ -5,10 +5,6 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.Collection;
 
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-
-import org.apache.derby.jdbc.ClientDataSource;
 import org.bardes.entities.Cue;
 import org.bardes.state.DB;
 import org.mozilla.javascript.Context;
@@ -18,20 +14,6 @@ import org.mozilla.javascript.Scriptable;
 
 public class Config
 {
-	public void a() throws NamingException
-	{
-		InitialContext ic = new InitialContext();
-		
-		ClientDataSource ds = new ClientDataSource();
-		ds.setServerName("localhost");
-		ds.setDatabaseName("mp");
-		ds.setUser("app");
-		ds.setPassword("app");
-		ds.setConnectionAttributes(";create=true");
-		
-		ic.bind("jdbc/__default", ds);
-	}
-	
 	public void f() throws IOException
 	{
 		Context cx = Context.enter();
