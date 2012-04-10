@@ -84,10 +84,15 @@ public class DisplayPool
 	public static void goCue(String cue)
 	{
 		int n;
-		if (cue.equalsIgnoreCase("next"))
+		if (cue.equalsIgnoreCase("next")) 
 		{
 			n = cues.indexOf(currentCue);
 			n++;
+		}
+		else if (cue.equalsIgnoreCase("prev")) 
+		{
+			n = cues.indexOf(currentCue);
+			n--;
 		}
 		else
 		{

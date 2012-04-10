@@ -70,9 +70,14 @@ function refresh(display)
 
 function operatorKey(event)
 {
-	if (event.keyCode == 32) // spacebar
+	if (event.keyCode == VK_SPACE || event.keyCode == VK_DOWN)
 	{
 		goCue('next');
+		event.bubbles = false;
+	}
+	else if (event.keyCode == VK_UP)
+	{
+		goCue('prev');
 		event.bubbles = false;
 	}
 }
