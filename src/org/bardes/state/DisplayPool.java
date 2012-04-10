@@ -83,14 +83,23 @@ public class DisplayPool
 	
 	public static void goCue(String cue)
 	{
-		Cue x = new Cue();
-		x.setCue(cue);
-		
-		int n = cues.indexOf(x);
-		if (n >= 0)
+		int n;
+		if (cue.equalsIgnoreCase("next"))
 		{
-			x = cues.get(n);
-			goCue(x);
+			n = cues.indexOf(currentCue);
+			n++;
+		}
+		else
+		{
+			Cue x = new Cue();
+			x.setCue(cue);
+			
+			n = cues.indexOf(x);
+		}
+		if (n >= 0 && n < cues.size())
+		{
+			Cue c = cues.get(n);
+			goCue(c);
 		}
 	}
 	

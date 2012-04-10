@@ -1,7 +1,7 @@
-a:link {text-decoration:none;}
-a:visited {text-decoration:none;}
-a:hover {text-decoration:underline;}
-a:active {text-decoration:underline;}
+a:link {text-decoration:none;color:white;}
+a:visited {text-decoration:none;color:white;}
+a:hover {text-decoration:underline;color:white;}
+a:active {text-decoration:underline;color:white;}
 
 body {
 	background: black;
@@ -24,4 +24,10 @@ table.operator tr td {
 	text-align: center;
 	width: 133px;
 	height: 100px;
+}
+
+input.gobutton {
+	width: 75px;
+	height: 75px;
+	font-size: 28pt;
 }
