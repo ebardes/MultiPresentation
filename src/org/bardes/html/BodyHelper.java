@@ -1,7 +1,9 @@
 package org.bardes.html;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.net.URLEncoder;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -21,7 +23,7 @@ public class BodyHelper
 		return new java.util.Date().toString();
 	}
 	
-	public CharSequence slideContent(Slide slide)
+	public CharSequence slideContent(Slide slide) throws UnsupportedEncodingException
 	{
 		StringBuilder sb = new StringBuilder();
 		String baseURL = req.getRequestURI();
@@ -31,7 +33,9 @@ public class BodyHelper
 		{
 		case IMAGE:
 			url = url.resolve("slides/");
-			URI href = url.resolve(slide.getContentFile());
+			String contentFile = slide.getContentFile();
+			contentFile = URLEncoder.encode(contentFile, "UTF8");
+			URI href = url.resolve(contentFile);
 			sb.append("<img src=\""+href+"\" width=100% height=100% />");
 		}
 		return sb;
@@ -50,7 +54,7 @@ public class BodyHelper
 		return url;
 	}
 	
-	public String thumbnail(Slide slide)
+	public String thumbnail(Slide slide) throws UnsupportedEncodingException
 	{
 		String baseURL = req.getRequestURI();
 		URI url = URI.create(baseURL);
@@ -59,7 +63,9 @@ public class BodyHelper
 		{
 		case IMAGE:
 			url = url.resolve("slides/");
-			URI href = url.resolve(slide.getContentFile());
+			String contentFile = slide.getContentFile();
+			contentFile = URLEncoder.encode(contentFile, "UTF8");
+			URI href = url.resolve(contentFile);
 			return "<img src=\"" + href + "\" width=100% height=100% />";
 			
 		case BLANK:
