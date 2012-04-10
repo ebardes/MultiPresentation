@@ -70,12 +70,12 @@ function refresh(display)
 
 function operatorKey(event)
 {
-	if (event.keyCode == VK_SPACE || event.keyCode == VK_DOWN)
+	if (event.keyCode == 32 /* space */ || event.keyCode == 40 /* key down */)
 	{
 		goCue('next');
 		event.bubbles = false;
 	}
-	else if (event.keyCode == VK_UP)
+	else if (event.keyCode == 38 /* key up */)
 	{
 		goCue('prev');
 		event.bubbles = false;
