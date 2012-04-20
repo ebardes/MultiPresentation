@@ -51,7 +51,7 @@ public class DisplayPool
 				cues = db.getCues();
 				Collections.sort(cues);
 				
-				for (int i = 1; i < show.getMaxProjectors(); i++)
+				for (int i = 1; i <= show.getMaxProjectors(); i++)
 				{
 					String uri = "/display/"+i;
 					
