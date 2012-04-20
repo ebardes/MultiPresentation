@@ -56,12 +56,20 @@ function onLiveLoad(url)
 
 function makeblank(cue, projector)
 {
-	new Ajax.Request("blank/"+cue+","+projector);
+	new Ajax.Request("blank/"+cue+","+projector, {
+		onSuccess: function(transport) {
+			history.go(0);
+		}
+	});
 }
 
 function maketrack(cue, projector)
 {
-	new Ajax.Request("track/"+cue+","+projector);
+	new Ajax.Request("track/"+cue+","+projector, {
+		onSuccess: function(transport) {
+			history.go(0);
+		}
+	});
 }
 
 function goCue(cue)
