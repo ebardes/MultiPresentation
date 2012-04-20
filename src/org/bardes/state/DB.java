@@ -2,25 +2,31 @@ package org.bardes.state;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
+import javax.naming.Context;
+import javax.naming.spi.InitialContextFactory;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
+import javax.sql.DataSource;
 
 import org.bardes.entities.Cue;
 import org.bardes.entities.Show;
 import org.bardes.entities.Slide;
 import org.bardes.entities.Slide.Type;
+import org.eclipse.persistence.config.PersistenceUnitProperties;
 
 public class DB
 {
 	public static final String PERSISTENCE_NAME = "MultiPresentation";
 //	private static EntityManagerFactory entityManagerFactory;
 	private static Map<String, Object> env;
+	private static EntityManagerFactory entityManagerFactory;
 	
 	public DB()
 	{
@@ -65,9 +71,31 @@ public class DB
 		return list;
 	}
 
-	private synchronized EntityManager getEntityManager()
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private static synchronized EntityManager getEntityManager()
 	{
-		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory(PERSISTENCE_NAME, env);
+		if (entityManagerFactory == null)
+		{
+			try
+			{
+				InitialContextFactory cf = new org.cchmc.jndi.XMLContextFactory();
+				Hashtable hashtable = new Hashtable();
+				hashtable.put(Context.PROVIDER_URL, "${user.home}/jndi");
+				Context ic = cf.getInitialContext(hashtable);
+				DataSource ds = (DataSource) ic.lookup("jdbc/mp"); 
+
+				if (env == null)
+					env = new HashMap<String, Object>();
+
+				env.put(PersistenceUnitProperties.NON_JTA_DATASOURCE, ds);
+				env.put(PersistenceUnitProperties.JTA_DATASOURCE, ds);
+			}
+			catch (Exception e)
+			{
+				throw new RuntimeException(e);
+			}
+			entityManagerFactory = Persistence.createEntityManagerFactory(PERSISTENCE_NAME, env);
+		}
 		return entityManagerFactory.createEntityManager();
 	}
 

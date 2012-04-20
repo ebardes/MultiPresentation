@@ -32,12 +32,19 @@ public class BodyHelper
 		switch (slide.getContentType())
 		{
 		case IMAGE:
-			sb.append("<img src=\""+generateImageURL(url, slide)+"\" width=100% height=100% />");
+			sb.append("<img src=\""+generateSourceURL(url, slide)+"\" width=100% height=100% />");
+			break;
+			
+		case MOVIE:
+			sb.append("<video width=\"100%\" height=\"100%\">");
+			sb.append("<source src=\""+generateSourceURL(url, slide)+"\" />");
+			sb.append("</video>");
+			break;
 		}
 		return sb;
 	}
 
-	protected URI generateImageURL(URI baseURL, Slide slide) throws UnsupportedEncodingException
+	protected URI generateSourceURL(URI baseURL, Slide slide) throws UnsupportedEncodingException
 	{
 		baseURL = baseURL.resolve("slides/");
 		String contentFile = slide.getContentFile();
@@ -66,7 +73,7 @@ public class BodyHelper
 		switch (slide.getContentType())
 		{
 		case IMAGE:
-			return "<img src=\"" + generateImageURL(url, slide) + "\" width=100% height=100% />";
+			return "<img src=\"" + generateSourceURL(url, slide) + "\" width=100% height=100% />";
 			
 		case BLANK:
 			return "Blank";
