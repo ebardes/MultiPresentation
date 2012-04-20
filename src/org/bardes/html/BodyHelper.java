@@ -36,7 +36,7 @@ public class BodyHelper
 			break;
 			
 		case MOVIE:
-			sb.append("<video width=\"100%\" height=\"100%\">");
+			sb.append("<video id=\"v"+slide.getId()+"\" width=\"100%\" height=\"100%\">");
 			sb.append("<source src=\""+generateSourceURL(url, slide)+"\" />");
 			sb.append("</video>");
 			break;
@@ -74,6 +74,9 @@ public class BodyHelper
 		{
 		case IMAGE:
 			return "<img src=\"" + generateSourceURL(url, slide) + "\" width=100% height=100% />";
+			
+		case MOVIE:
+			return "Clip";
 			
 		case BLANK:
 			return "Blank";

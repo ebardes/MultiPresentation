@@ -212,4 +212,70 @@ public class DB
 			em.close();
 		}
 	}
+
+	public void blankSlide(Double cueNum, int projector)
+	{
+		EntityManager em = getEntityManager();
+		try
+		{
+			Cue cue = em.find(Cue.class, cueNum);
+			if (cue == null)
+			{
+				cue = new Cue();
+				cue.setCue(cueNum);
+			}
+			
+			Slide slide = cue.getSlide(projector);
+			if (slide == null)
+			{
+				slide = new Slide();
+				cue.setSlide(projector, slide);
+			}
+			
+			slide.setContentFile(null);
+			slide.setContentType(Type.BLANK);
+			
+			EntityTransaction tx = em.getTransaction();
+			tx.begin();
+			em.merge(cue);
+			tx.commit();
+		}
+		finally
+		{
+			em.close();
+		}
+	}
+	
+	public void trackSlide(Double cueNum, int projector)
+	{
+		EntityManager em = getEntityManager();
+		try
+		{
+			Cue cue = em.find(Cue.class, cueNum);
+			if (cue == null)
+			{
+				cue = new Cue();
+				cue.setCue(cueNum);
+			}
+			
+			Slide slide = cue.getSlide(projector);
+			if (slide == null)
+			{
+				slide = new Slide();
+				cue.setSlide(projector, slide);
+			}
+			
+			slide.setContentFile(null);
+			slide.setContentType(Type.TRACKED);
+			
+			EntityTransaction tx = em.getTransaction();
+			tx.begin();
+			em.merge(cue);
+			tx.commit();
+		}
+		finally
+		{
+			em.close();
+		}
+	}
 }

@@ -22,7 +22,15 @@ for (Cue c : db.getCues()) {
 	Double q = c.getCue();
 %><tr id="trq_<%=q%>">
 <td><input class="gobutton" type="button" onclick="goCue(<%= q %>);" value="Go" /> <%= q %></td>
-<% for (int p = 1; p <= show.getMaxProjectors(); p++) { Slide s = c.getSlide(p); if (s==null) s = def; %><td><%= h.thumbnail(s) %></td><% } %>
+<% for (int p = 1; p <= show.getMaxProjectors(); p++) { Slide s = c.getSlide(p); if (s==null) s = def;
+%><td>
+<div class="edittools">
+<input type="button" value="blank" onclick="makeblank(<%=q%>,<%=p%>);" />
+<input type="button" value="track" onclick="maketrack(<%=q%>,<%=p%>);" />
+</div>
+<div class="thumbnail"><%= h.thumbnail(s) %></div>
+</td><%
+} %>
 </tr><% } %>
 </table>
 </body>

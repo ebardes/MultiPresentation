@@ -58,6 +58,16 @@ function onLiveLoad(url)
 	timerId = setInterval(timedFunc, 10000);
 }
 
+function makeblank(cue, projector)
+{
+	new Ajax.Request("blank/"+cue+","+projector);
+}
+
+function maketrack(cue, projector)
+{
+	new Ajax.Request("track/"+cue+","+projector);
+}
+
 function goCue(cue)
 {
 	new Ajax.Request("go/"+cue);

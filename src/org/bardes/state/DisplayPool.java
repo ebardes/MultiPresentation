@@ -165,4 +165,30 @@ public class DisplayPool
 			}
 		}
 	}
+
+	public static void blank(String p) 
+	{
+		String[] split = p.split(",");
+		
+		Double cueNum = Double.valueOf(split[0]);
+		int projector = Integer.valueOf(split[1]);
+		
+		DB db = new DB();
+		
+		db.blankSlide(cueNum, projector);
+		refresh();
+	}
+
+	public static void track(String p) 
+	{
+		String[] split = p.split(",");
+		
+		Double cueNum = Double.valueOf(split[0]);
+		int projector = Integer.valueOf(split[1]);
+		
+		DB db = new DB();
+		
+		db.trackSlide(cueNum, projector);
+		refresh();
+	}
 }
