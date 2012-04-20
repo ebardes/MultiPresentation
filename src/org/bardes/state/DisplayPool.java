@@ -176,6 +176,8 @@ public class DisplayPool
 		DB db = new DB();
 		
 		db.blankSlide(cueNum, projector);
+		
+		cues = db.getCues();
 		refresh();
 	}
 
@@ -189,6 +191,8 @@ public class DisplayPool
 		DB db = new DB();
 		
 		db.trackSlide(cueNum, projector);
+		
+		cues = db.getCues();
 		refresh();
 	}
 }
