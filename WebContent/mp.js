@@ -15,10 +15,6 @@ function timedFunc()
 		
 		ws.onmessage = msg;
 		
-		ws.onerror = function() {
-			alert('error');
-		};
-		
 		ws.onclose = function() {
 			document.ws = null;
 			$('info').innerHTML = 'Disconnected';
