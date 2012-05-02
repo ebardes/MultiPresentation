@@ -1,9 +1,15 @@
 package org.bardes.state;
 
 import org.bardes.entities.Cue;
+import org.java_websocket.WebSocket;
 
 public class OperatorState extends DisplayState 
 {
+
+	public OperatorState(WebSocket sock) 
+	{
+		super(sock);
+	}
 
 	@Override
 	public void onMessage(String message)
@@ -33,7 +39,7 @@ public class OperatorState extends DisplayState
 		{
 			try
 			{
-				sock.send("curcue:"+currentCue);
+				sock.send("curcue:"+getCurrentCue());
 			}
 			catch (Exception ignore)
 			{

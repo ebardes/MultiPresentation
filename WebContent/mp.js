@@ -52,7 +52,9 @@ function msg(e)
 	{
 		$('info').innerHTML = 'Refresh';
 		
-		history.go(0);
+		// history.go(0);
+		
+		 location.reload(true);
 	}
 	if (e.data.startsWith('curcue:'))
 	{

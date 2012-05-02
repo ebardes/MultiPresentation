@@ -3,14 +3,22 @@ package org.bardes.state;
 import org.bardes.entities.Cue;
 import org.bardes.entities.Slide;
 import org.bardes.entities.Slide.Type;
+import org.java_websocket.WebSocket;
 
 public class ProjectorState extends DisplayState 
 {
 	private final int projectorId;
 	
-	public ProjectorState(int projectorId)
+	public ProjectorState(WebSocket sock, int projectorId)
 	{
+		super(sock);
 		this.projectorId = projectorId;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return super.toString() + ":Display#"+projectorId;
 	}
 
 	@Override
@@ -22,7 +30,6 @@ public class ProjectorState extends DisplayState
 			if (slide == null || slide.getContentType() == Type.TRACKED)
 				return;
 			
-			this.currentCue = cue.getCue();
 			if (sock != null)
 			{
 				sock.send("changeslide:q"+cue.getCue());
@@ -57,7 +64,7 @@ public class ProjectorState extends DisplayState
 		{
 			try
 			{
-				sock.send("changeslide:q"+currentCue);
+				sock.send("changeslide:q"+getCurrentCue());
 			}
 			catch (Exception ignore)
 			{

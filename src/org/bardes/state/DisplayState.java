@@ -1,20 +1,33 @@
 package org.bardes.state;
 
+import java.net.InetSocketAddress;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import org.bardes.entities.Cue;
 import org.java_websocket.WebSocket;
 
-public abstract class DisplayState implements Runnable
+public abstract class DisplayState implements Runnable, Comparable<DisplayState>
 {
 	protected BlockingQueue<String> messages = new LinkedBlockingQueue<String>();
 	
-	protected Double currentCue;
-	
-	public WebSocket sock;
+	public final WebSocket sock;
 
 	private long ping;
+
+	private final InetSocketAddress sockAddr;
+	
+	public DisplayState(WebSocket sock) 
+	{
+		this.sock = sock;
+		this.sockAddr = sock.getRemoteSocketAddress();
+	}
+	
+	@Override
+	public String toString() 
+	{
+		return getClass().getName() + "/" + sockAddr;
+	}
 	
 	public void message(String msg)
 	{
@@ -22,6 +35,26 @@ public abstract class DisplayState implements Runnable
 		messages.add(msg);
 	}
 	
+	@Override
+	public int compareTo(DisplayState o) 
+	{
+		int p1 = sockAddr.getPort();
+		int p2 = o.sockAddr.getPort();
+		return p1 - p2;
+	}
+	
+	@Override
+	public boolean equals(Object obj) 
+	{
+		return compareTo((DisplayState) obj) == 0;
+	}
+	
+	@Override
+	public int hashCode() 
+	{
+		return sock.getLocalSocketAddress().getPort();
+	}
+
 	@Override
 	public void run()
 	{
@@ -61,9 +94,12 @@ public abstract class DisplayState implements Runnable
 
 	public void shutdown()
 	{
-		// TODO Auto-generated method stub
-		
 	}
 
 	public abstract void updateCue();
+
+	protected Double getCurrentCue()
+	{
+		return DisplayPool.getCurrentCue();
+	}
 }

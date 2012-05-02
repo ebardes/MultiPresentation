@@ -1,33 +1,25 @@
 package org.bardes.state;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.bardes.entities.Cue;
-import org.bardes.entities.Show;
 import org.bardes.html.WSS;
 
 
 public class DisplayPool
 {
-	private static Map<String, DisplayState> projectors = new HashMap<String, DisplayState>();
+	private static List<DisplayState> displays = new ArrayList<DisplayState>();
 	private static ExecutorService threadPool = Executors.newCachedThreadPool();
 	
-	private static Show show;
 	private static List<Cue> cues;
 	
 	private static Cue currentCue = null;
 	private static Thread t;
-
-	public static DisplayState get(String projectorId)
-	{
-		return projectors.get(projectorId);
-	}
 
 	public static void startup()
 	{
@@ -45,29 +37,12 @@ public class DisplayPool
 					return;
 				}
 				
-				WSS wss = WSS.getInstance();
 				DB db = new DB();
-				show = db.getShow();
-				
 				cues = db.getCues();
 				Collections.sort(cues);
 				
-				String uri = "/operator";
-				OperatorState opState = new OperatorState();
-				projectors.put("/operator", opState);
-				threadPool.submit(opState);
-				wss.registerDisplayStateCallback(uri, opState);
-				
-				for (int i = 1; i <= show.getMaxProjectors(); i++)
-				{
-					uri = "/display/"+i;
-					
-					ProjectorState projectorState = new ProjectorState(i);
-					projectors.put(uri, projectorState);
-					threadPool.submit(projectorState);
-					
-					wss.registerDisplayStateCallback(uri, projectorState);
-				}
+				if (currentCue == null && cues.size() > 0)
+					currentCue = cues.get(0);
 				
 				t = null;
 			}
@@ -79,10 +54,10 @@ public class DisplayPool
 	public static void goCue(Cue cue)
 	{
 		currentCue = cue;
-		if (projectors == null)
+		if (displays == null)
 			return;
 		
-		for (DisplayState d : projectors.values())
+		for (DisplayState d : displays)
 		{
 			d.goCue(cue);
 		}
@@ -145,7 +120,7 @@ public class DisplayPool
 		WSS wss = WSS.getInstance();
 		wss.closeAll();
 		
-		for (DisplayState s : projectors.values())
+		for (DisplayState s : displays)
 		{
 			s.shutdown();
 		}
@@ -155,22 +130,11 @@ public class DisplayPool
 	public static void refresh()
 	{
 		DB db = new DB();
-		show = db.getShow();
-		
 		cues = db.getCues();
 		Collections.sort(cues);
 		
 		WSS wss = WSS.getInstance();
-		for (int projectorId = 1; projectorId <= show.getMaxProjectors(); projectorId++)
-		{
-			try
-			{
-				wss.sendDisplay(projectorId, "refresh");
-			}
-			catch (InterruptedException ignore)
-			{
-			}
-		}
+		wss.sendAll("refresh");
 	}
 
 	public static void blank(String p) 
@@ -206,5 +170,22 @@ public class DisplayPool
 	public static Collection<Cue> getCues()
 	{
 		return cues;
+	}
+	
+	public static void addDisplay(DisplayState display)
+	{
+		displays.add(display);
+		System.out.println("Add display: "+display + " " + displays);
+	}
+	
+	public static void removeDisplay(DisplayState display)
+	{
+		displays.remove(display);
+		System.out.println("Remove display: "+display + " " + displays);
+	}
+
+	public static Double getCurrentCue() 
+	{
+		return currentCue.getCue();
 	}
 }

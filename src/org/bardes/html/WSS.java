@@ -5,7 +5,10 @@ import java.net.InetSocketAddress;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.bardes.state.DisplayPool;
 import org.bardes.state.DisplayState;
+import org.bardes.state.OperatorState;
+import org.bardes.state.ProjectorState;
 import org.java_websocket.WebSocket;
 import org.java_websocket.WebSocketServer;
 import org.java_websocket.handshake.ClientHandshake;
@@ -16,37 +19,33 @@ public class WSS extends WebSocketServer
 	private static WSS wss = new WSS();
 	private static boolean started = false;
 	
-	Map<InetSocketAddress, String> addresses = new ConcurrentHashMap<InetSocketAddress, String>();
-	Map<String, WebSocket> sockets = new ConcurrentHashMap<String, WebSocket>();
-	Map<String, DisplayState> displays = new ConcurrentHashMap<String, DisplayState>();
+	Map<InetSocketAddress, DisplayState> addresses = new ConcurrentHashMap<InetSocketAddress, DisplayState>();
+//	Map<String, WebSocket> sockets = new ConcurrentHashMap<String, WebSocket>();
+//	Map<String, Collection<DisplayState>> displays = new ConcurrentHashMap<String, Collection<DisplayState>>();
 
 	public WSS()
 	{
 		super(new InetSocketAddress(SOCKETSERVERPORT));
 	}
 	
-	public void registerDisplayStateCallback(String uri, DisplayState state)
-	{
-		displays.put(uri, state);
-	}
-	
 	private DisplayState getDisplayState(WebSocket sock)
 	{
 		InetSocketAddress sockAddr = sock.getRemoteSocketAddress();
-		String v = addresses.get(sockAddr);
-		if (v == null)
-			return null;
-		
-		return displays.get(v);
+		DisplayState state = addresses.get(sockAddr);
+		return state;
 	}
 
 	@Override
 	public void onClose(WebSocket sock, int arg1, String arg2, boolean arg3) 
 	{
+		InetSocketAddress sockAddr = sock.getRemoteSocketAddress();
 		DisplayState state = getDisplayState(sock);
 		if (state != null)
 		{
 			state.close();
+			addresses.remove(sockAddr);
+			
+			DisplayPool.removeDisplay(state);
 		}
 	}
 
@@ -72,7 +71,6 @@ public class WSS extends WebSocketServer
 		DisplayState state = getDisplayState(sock);
 		if (state != null)
 		{
-			state.sock = sock;
 			state.message(msg);
 		}
 	}
@@ -83,14 +81,23 @@ public class WSS extends WebSocketServer
 		String value = client.getResourceDescriptor();
 		InetSocketAddress sockAddr = sock.getRemoteSocketAddress();
 		
-		addresses.put(sockAddr, value);
-		sockets.put(value, sock);
+		DisplayState state = null;
+		if (value.startsWith("/operator"))
+		{
+			state = new OperatorState(sock);
+		}
+		else if (value.startsWith("/display"))
+		{
+			String num = value.replaceAll(".*/", "");
+			int projectorId = Integer.valueOf(num);
+			state = new ProjectorState(sock, projectorId);
+		}
 		
-		DisplayState state = getDisplayState(sock);
 		if (state != null)
 		{
-			state.sock = sock;
+			addresses.put(sockAddr, state);
 			state.updateCue();
+			DisplayPool.addDisplay(state);
 		}
 	}
 
@@ -104,19 +111,6 @@ public class WSS extends WebSocketServer
 		return wss;
 	}
 	
-	public void sendDisplay(int projectorId, String message) throws InterruptedException
-	{
-		String key = "/display/"+projectorId;
-		if (projectorId == 0)
-			key = "/operator";
-		
-		if (wss.sockets.containsKey(key))
-		{
-			WebSocket webSocket = wss.sockets.get(key);
-			webSocket.send(message);
-		}
-	}
-
 	public void closeAll()
 	{
 		for (WebSocket sock : connections())
@@ -133,5 +127,20 @@ public class WSS extends WebSocketServer
 			e.printStackTrace();
 		}
 		wss = null;
+	}
+
+	public void sendAll(String string) 
+	{
+		for (WebSocket sock : connections())
+		{
+			try
+			{
+				sock.send("refresh");
+			}
+			catch (Exception e) 
+			{
+				e.printStackTrace();
+			}
+		}
 	}
 }
