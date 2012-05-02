@@ -18,7 +18,7 @@ function show(id)
 </script>
 </head>
 <body onload="onLiveLoad('<%= new BodyHelper(request).webDisplaySocketURL() %>');">
-<div id="info"></div>
+<div id="info" style="display:none"></div>
 <%
 	int projectorId = Integer.parseInt(request.getParameter("projectorId"));
 
