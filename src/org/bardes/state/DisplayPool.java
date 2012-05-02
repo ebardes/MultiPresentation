@@ -51,9 +51,15 @@ public class DisplayPool
 				cues = db.getCues();
 				Collections.sort(cues);
 				
+				String uri = "/operator";
+				OperatorState opState = new OperatorState();
+				projectors.put("/operator", opState);
+				threadPool.submit(opState);
+				wss.registerDisplayStateCallback(uri, opState);
+				
 				for (int i = 1; i <= show.getMaxProjectors(); i++)
 				{
-					String uri = "/display/"+i;
+					uri = "/display/"+i;
 					
 					ProjectorState projectorState = new ProjectorState(i);
 					projectors.put(uri, projectorState);

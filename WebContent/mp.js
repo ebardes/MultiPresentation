@@ -40,11 +40,40 @@ function msg(e)
 		
 		currentCue = q;
 	}
+	if (e.data.startsWith('startclip:'))
+	{
+		var q = e.data.substring(10);
+//		try {
+			var mov = document.getElementById(q);
+			mov.play();
+//		} catch (e) {}
+	}
 	if (e.data.startsWith('refresh'))
 	{
 		$('info').innerHTML = 'Refresh';
 		
 		history.go(0);
+	}
+	if (e.data.startsWith('curcue:'))
+	{
+		var q = e.data.substring(7);
+		
+		if (q != currentCue)
+		{
+			var tr = document.getElementById('trq_'+q);
+			tr.style.backgroundColor = '#300050';
+			
+			try
+			{
+				if (currentCue != '')
+				{
+					tr = document.getElementById('trq_'+currentCue);
+					tr.style.backgroundColor = '#000000';
+				}
+			} catch (e) {}
+		}
+		
+		currentCue = q;
 	}
 }
 

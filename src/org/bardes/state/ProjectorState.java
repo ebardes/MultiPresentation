@@ -7,7 +7,6 @@ import org.bardes.entities.Slide.Type;
 public class ProjectorState extends DisplayState 
 {
 	private final int projectorId;
-	private Double currentCue;
 	
 	public ProjectorState(int projectorId)
 	{
@@ -25,7 +24,14 @@ public class ProjectorState extends DisplayState
 			
 			this.currentCue = cue.getCue();
 			if (sock != null)
+			{
 				sock.send("changeslide:q"+cue.getCue());
+				
+				if (slide.getContentType() == Type.MOVIE)
+				{
+					sock.send("startclip:v" + slide.getId());
+				}
+			}
 		}
 		catch (Exception e)
 		{

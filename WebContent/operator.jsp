@@ -5,7 +5,7 @@
 <script type="text/javascript" src="prototype.js"></script>
 <script type="text/javascript" src="mp.js"></script>
 </head>
-<body onkeydown="operatorKey(event);">
+<body onkeydown="operatorKey(event);" onload="onLiveLoad('<%= new BodyHelper(request).webOperatorSocketURL() %>');">
 <% DB db = new DB();
 Slide def = new Slide();
 def.setContentType(Slide.Type.TRACKED);
@@ -33,5 +33,6 @@ for (Cue c : db.getCues()) {
 } %>
 </tr><% } %>
 </table>
+<div id='info' style='color: #808080;'>Status</div>
 </body>
 </html>

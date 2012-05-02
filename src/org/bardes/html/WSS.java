@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bardes.state.DisplayState;
-import org.bardes.state.ProjectorState;
 import org.java_websocket.WebSocket;
 import org.java_websocket.WebSocketServer;
 import org.java_websocket.handshake.ClientHandshake;
@@ -26,7 +25,7 @@ public class WSS extends WebSocketServer
 		super(new InetSocketAddress(SOCKETSERVERPORT));
 	}
 	
-	public void registerDisplayStateCallback(String uri, ProjectorState state)
+	public void registerDisplayStateCallback(String uri, DisplayState state)
 	{
 		displays.put(uri, state);
 	}

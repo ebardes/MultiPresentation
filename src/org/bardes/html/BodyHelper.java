@@ -65,6 +65,19 @@ public class BodyHelper
 		return url;
 	}
 	
+	public String webOperatorSocketURL() throws IOException
+	{
+		WSS wss = WSS.getInstance();
+		int port = wss.getPort();
+		
+		String url = "ws://" +
+				req.getServerName() +
+				":" + port +
+				"/operator";
+		
+		return url;
+	}
+	
 	public String thumbnail(Slide slide) throws UnsupportedEncodingException
 	{
 		String baseURL = req.getRequestURI();

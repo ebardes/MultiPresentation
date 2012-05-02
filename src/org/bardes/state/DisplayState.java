@@ -10,6 +10,8 @@ public abstract class DisplayState implements Runnable
 {
 	protected BlockingQueue<String> messages = new LinkedBlockingQueue<String>();
 	
+	protected Double currentCue;
+	
 	public WebSocket sock;
 
 	private long ping;
