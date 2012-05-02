@@ -107,6 +107,9 @@ public class WSS extends WebSocketServer
 	public void sendDisplay(int projectorId, String message) throws InterruptedException
 	{
 		String key = "/display/"+projectorId;
+		if (projectorId == 0)
+			key = "/operator";
+		
 		if (wss.sockets.containsKey(key))
 		{
 			WebSocket webSocket = wss.sockets.get(key);

@@ -17,14 +17,12 @@ function show(id)
 }
 </script>
 </head>
-<body onload="onLiveLoad('<%= new BodyHelper(request).webDisplaySocketURL() %>');">
+<body class="display" onload="onLiveLoad('<%= new BodyHelper(request).webDisplaySocketURL() %>');">
 <div id="info" style="display:none"></div>
 <%
 	int projectorId = Integer.parseInt(request.getParameter("projectorId"));
 
-	DB db = new DB();
-	Show show = db.getShow();
-	List<Cue> cues = db.getCues();
+	Collection<Cue> cues = DisplayPool.getCues();
   	for (Cue q : cues) {
 	  Slide s = q.getSlide(projectorId);
 	  if (s == null) continue;

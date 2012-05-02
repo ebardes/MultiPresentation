@@ -8,6 +8,9 @@ body {
 	color: white;
 	font-family: Optima;
 	margin: 0;
+}
+
+body.display {
 	overflow: hidden;
 }
 

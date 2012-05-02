@@ -1,5 +1,6 @@
 package org.bardes.state;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -200,5 +201,10 @@ public class DisplayPool
 		
 		cues = db.getCues();
 		refresh();
+	}
+	
+	public static Collection<Cue> getCues()
+	{
+		return cues;
 	}
 }

@@ -18,7 +18,7 @@ Show show = db.getShow(); %>
 <% for (int p = 1; p <= show.getMaxProjectors(); p++) { %><th>Projector <%= p %></th><% } %>
 </tr>
 <%
-for (Cue c : db.getCues()) {
+for (Cue c : DisplayPool.getCues()) {
 	Double q = c.getCue();
 %><tr id="trq_<%=q%>">
 <td><input class="gobutton" type="button" onclick="goCue(<%= q %>);" value="Go" /> <%= q %></td>
