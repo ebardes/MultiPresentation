@@ -82,7 +82,7 @@ function msg(e)
 function onLiveLoad(url)
 {
 	savedurl = url;
-	timerId = setInterval(timedFunc, 10000);
+	timerId = setInterval(timedFunc, 2000);
 }
 
 function makeblank(cue, projector)
@@ -124,5 +124,27 @@ function operatorKey(event)
 	{
 		goCue('prev');
 		event.bubbles = false;
+	}
+}
+
+function hide(id)
+{
+	var z = document.getElementById(id);
+	z.style.opacity = 0;
+	if (z.childNodes[0].nodeName == "VIDEO")
+	{
+		z.childNodes[0].pause();
+	}
+}
+
+function show(id)
+{
+	var z = document.getElementById(id);
+	z.style.opacity = 1;
+	var x = z.childNodes[0];
+	if (x.nodeName == "VIDEO")
+	{
+		x.currentTime = 0;
+		x.play();
 	}
 }

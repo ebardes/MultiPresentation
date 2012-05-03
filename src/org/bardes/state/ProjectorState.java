@@ -33,11 +33,11 @@ public class ProjectorState extends DisplayState
 			if (sock != null)
 			{
 				sock.send("changeslide:q"+cue.getCue());
-				
-				if (slide.getContentType() == Type.MOVIE)
-				{
-					sock.send("startclip:v" + slide.getId());
-				}
+//				
+//				if (slide.getContentType() == Type.MOVIE)
+//				{
+//					sock.send("startclip:v" + slide.getId());
+//				}
 			}
 		}
 		catch (Exception e)

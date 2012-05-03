@@ -26,7 +26,7 @@ public abstract class DisplayState implements Runnable, Comparable<DisplayState>
 	@Override
 	public String toString() 
 	{
-		return getClass().getName() + "/" + sockAddr;
+		return getClass().getSimpleName() + "/" + sockAddr.getAddress().getHostAddress();
 	}
 	
 	public void message(String msg)

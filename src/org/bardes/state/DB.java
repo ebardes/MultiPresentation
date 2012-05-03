@@ -180,7 +180,7 @@ public class DB
 		}
 	}
 
-	public void saveImage(Double cueNum, int displayNum, String fileName)
+	public void saveImage(Double cueNum, int displayNum, String fileName, Type type)
 	{
 		EntityManager em = getEntityManager();
 		try
@@ -200,7 +200,7 @@ public class DB
 			}
 			
 			slide.setContentFile(fileName);
-			slide.setContentType(Type.IMAGE);
+			slide.setContentType(type);
 			
 			EntityTransaction tx = em.getTransaction();
 			tx.begin();

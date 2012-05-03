@@ -33,6 +33,6 @@ for (Cue c : DisplayPool.getCues()) {
 } %>
 </tr><% } %>
 </table>
-<div id='info' style='color: #808080;'>Status</div>
+<div id='info' style='color: #808080;'>Connecting ...</div>
 </body>
 </html>

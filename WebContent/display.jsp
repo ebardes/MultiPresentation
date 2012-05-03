@@ -4,18 +4,6 @@
 <% BodyHelper h = new BodyHelper(request); %>
 <script type="text/javascript" src="prototype.js"></script>
 <script type="text/javascript" src="mp.js"></script>
-<script type="text/javascript">
-function hide(id)
-{
-	var z = document.getElementById(id);
-	z.style.opacity = 0;
-}
-function show(id)
-{
-	var z = document.getElementById(id);
-	z.style.opacity = 1;
-}
-</script>
 </head>
 <body class="display" onload="onLiveLoad('<%= new BodyHelper(request).webDisplaySocketURL() %>');">
 <div id="info" style="display:none"></div>

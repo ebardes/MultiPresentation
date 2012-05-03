@@ -9,6 +9,12 @@
 <br/>
 <label for="display">Display: </label>
 <input id="display" name="display" size="10" />
+<br>
+<label for="type">Type: </label>
+<select id="type" name="type">
+<option value="IMAGE">Image</option>
+<option value="MOVIE">Clip</option>
+</select>
 <br/>
 <label for="file">File: </label>
 <input id="file" name="file" type="file" />

@@ -18,6 +18,7 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FilenameUtils;
 import org.bardes.entities.Show;
+import org.bardes.entities.Slide.Type;
 import org.bardes.state.DB;
 import org.bardes.state.DisplayPool;
 
@@ -28,7 +29,8 @@ public class Upload extends HttpServlet
 	{
 		cue,
 		file,
-		display
+		display,
+		type
 	}
 	private static final long serialVersionUID = 1L;
 
@@ -42,6 +44,7 @@ public class Upload extends HttpServlet
 			Integer displayNum = null;
 			DB db = new DB();
 			Show show = db.getShow();
+			Type type = Type.IMAGE;
 			File savedFile;
 			
 			File uploadBaseDirectory = new File(show.getUploadDir());
@@ -85,6 +88,14 @@ public class Upload extends HttpServlet
 						val = item.getString();
 						displayNum = Integer.parseInt(val);
 						break;
+						
+					case type:
+						try
+						{
+							type = Type.valueOf(item.getString());
+						}
+						catch (Exception ignore) {}
+						break;
 					}
 				}
 				catch (Exception ignore)
@@ -97,7 +108,7 @@ public class Upload extends HttpServlet
 			
 			if (displayNum != null && cueNum != null)
 			{
-				db.saveImage(cueNum, displayNum, fileName);
+				db.saveImage(cueNum, displayNum, fileName, type);
 				DisplayPool.refresh();
 			}
 			
