@@ -8,6 +8,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.bardes.entities.Cue;
+import org.bardes.entities.Show;
 import org.bardes.html.WSS;
 
 
@@ -19,36 +20,17 @@ public class DisplayPool
 	private static List<Cue> cues;
 	
 	private static Cue currentCue = null;
-	private static Thread t;
+	private static Show show;
 
 	public static void startup()
 	{
-		t = new Thread(new Runnable() {
-
-			public void run()
-			{
-				try
-				{
-					Thread.sleep(10000);
-				}
-				catch (InterruptedException e)
-				{
-					e.printStackTrace();
-					return;
-				}
-				
-				DB db = new DB();
-				cues = db.getCues();
-				Collections.sort(cues);
-				
-				if (currentCue == null && cues.size() > 0)
-					currentCue = cues.get(0);
-				
-				t = null;
-			}
-		});
+		DB db = new DB();
+		show = db.getShow();
+		cues = db.getCues();
+		Collections.sort(cues);
 		
-		t.start();
+		if (currentCue == null && cues.size() > 0)
+			currentCue = cues.get(0);
 	}
 	
 	public static void goCue(Cue cue)
@@ -110,11 +92,6 @@ public class DisplayPool
 		return currentCue;
 	}
 	
-	public static void join() throws InterruptedException
-	{
-		t.join();
-	}
-
 	public static void shutdown()
 	{
 		WSS wss = WSS.getInstance();
@@ -187,5 +164,20 @@ public class DisplayPool
 	public static Double getCurrentCue() 
 	{
 		return currentCue.getCue();
+	}
+
+	public static Show getShow()
+	{
+		return show;
+	}
+
+	public static void deleteCue(String p)
+	{
+		Double cueNum = Double.valueOf(p);
+		
+		DB db = new DB();
+		db.deleteCue(cueNum);
+		cues = db.getCues();
+		refresh();
 	}
 }

@@ -148,3 +148,22 @@ function show(id)
 		x.play();
 	}
 }
+
+function deleteCue(cue)
+{
+	new Ajax.Request("delete/"+cue);
+}
+
+function toggleEdit(ctl)
+{
+	var mode = ctl.checked ? 'block' : 'none';
+	var list = document.getElementsByClassName('edittools');
+	for (n in list) 
+	{
+		var e = list[n];
+		if (e && e.style)
+		{
+			e.style.display = mode;
+		}
+	}
+}

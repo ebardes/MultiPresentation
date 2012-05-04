@@ -40,9 +40,7 @@ table.operator tr td {
 }
 
 .edittools {
-	position: static;
-	top: 0;
-	z-index: 1;
+	display: none;
 }
 
 .thumbnail {

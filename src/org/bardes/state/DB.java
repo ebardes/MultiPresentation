@@ -278,4 +278,24 @@ public class DB
 			em.close();
 		}
 	}
+
+	public void deleteCue(Double cueNum)
+	{
+		EntityManager em = getEntityManager();
+		try
+		{
+			Cue cue = em.find(Cue.class, cueNum);
+			if (cue == null)
+				return;
+			
+			EntityTransaction tx = em.getTransaction();
+			tx.begin();
+			em.remove(cue);
+			tx.commit();
+		}
+		finally
+		{
+			em.close();
+		}
+	}
 }

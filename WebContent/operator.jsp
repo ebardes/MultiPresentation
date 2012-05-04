@@ -10,13 +10,20 @@
 Slide def = new Slide();
 def.setContentType(Slide.Type.TRACKED);
 Show show = db.getShow(); %>
+<div>
+<input type="checkbox" onclick="toggleEdit(this);" id="toggleedit"/>
+<label for="toggleedit">Show editing tools</label>
+</div>
+<div class="edittools">
 <a href="upload.jsp">Add/Update Slide</a>
+<br/>
 <input type="button" onclick="refresh(0);" value="refresh" />
+</div>
 <table class="operator">
 <tr>
 <th>Cue</th>
 <% for (int p = 1; p <= show.getMaxProjectors(); p++) { %><th>Projector <%= p %></th><% } %>
-</tr>
+<th> </th></tr>
 <%
 for (Cue c : DisplayPool.getCues()) {
 	Double q = c.getCue();
@@ -31,6 +38,9 @@ for (Cue c : DisplayPool.getCues()) {
 <div class="thumbnail"><%= h.thumbnail(s) %></div>
 </td><%
 } %>
+<td class="edittools">
+<input type="button" onclick="deleteCue(<%=q%>)" value="Delete Cue <%= q %>" />
+</td>
 </tr><% } %>
 </table>
 <div id='info' style='color: #808080;'>Connecting ...</div>

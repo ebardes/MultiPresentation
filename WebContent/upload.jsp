@@ -13,7 +13,9 @@
 <label for="type">Type: </label>
 <select id="type" name="type">
 <option value="IMAGE">Image</option>
-<option value="MOVIE">Clip</option>
+<option value="MOVIE">Movie</option>
+<option value="BLANK">Blank</option>
+<option value="TRACK">Track</option>
 </select>
 <br/>
 <label for="file">File: </label>
