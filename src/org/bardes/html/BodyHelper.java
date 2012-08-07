@@ -46,6 +46,10 @@ public class BodyHelper
 			sb.append("<source src=\""+generateSourceURL(url, uploadBaseDirectory, slide)+"\" />");
 			sb.append("</video>");
 			break;
+			
+		case BLANK:
+		case TRACKED:
+			// do nothing
 		}
 		return sb;
 	}
