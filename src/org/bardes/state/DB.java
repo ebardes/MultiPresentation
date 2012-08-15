@@ -4,7 +4,6 @@ import java.io.Closeable;
 import java.io.File;
 import java.util.Collection;
 import java.util.List;
-import java.util.SortedSet;
 
 import org.bardes.entities.Cue;
 import org.bardes.entities.Show;
@@ -41,7 +40,7 @@ public abstract class DB implements Closeable
 
 	public abstract Cue getCue(Double cueNum);
 
-	public abstract void saveImage(Double cueNum, int displayNum, String fileName, Type type);
+	public abstract void saveImage(Double cueNum, int displayNum, String fileName, Type type, Double fadeTime);
 
 	public abstract void blankSlide(Double cueNum, int projector);
 	

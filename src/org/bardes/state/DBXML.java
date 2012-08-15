@@ -165,10 +165,12 @@ public class DBXML extends DB
 	}
 
 	@Override
-	public void saveImage(Double cueNum, int displayNum, String fileName, Type type)
+	public void saveImage(Double cueNum, int displayNum, String fileName, Type type, Double fadeTime)
 	{
 		Cue cue = new Cue();
 		cue.setCue(cueNum);
+		cue.setFadeTime(fadeTime);
+		
 		Slide slide = new Slide();
 		slide.setContentFile(fileName);
 		slide.setContentType(type);

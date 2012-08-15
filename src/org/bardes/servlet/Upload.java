@@ -28,6 +28,7 @@ public class Upload extends HttpServlet
 	private enum FieldNames
 	{
 		cue,
+		fade,
 		file,
 		display,
 		type
@@ -41,6 +42,7 @@ public class Upload extends HttpServlet
 		{
 			String fileName = null;
 			Double cueNum = null;
+			Double fadeTime = null;
 			Integer displayNum = null;
 			
 			DB db = DB.getInstance();
@@ -91,6 +93,11 @@ public class Upload extends HttpServlet
 						displayNum = Integer.parseInt(val);
 						break;
 						
+					case fade:
+						val = item.getString();
+						fadeTime = Double.parseDouble(val);
+						break;
+						
 					case type:
 						try
 						{
@@ -110,7 +117,7 @@ public class Upload extends HttpServlet
 			
 			if (displayNum != null && cueNum != null)
 			{
-				db.saveImage(cueNum, displayNum, fileName, type);
+				db.saveImage(cueNum, displayNum, fileName, type, fadeTime);
 				DisplayPool.refresh(db);
 			}
 			db.close();
