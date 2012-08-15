@@ -1,39 +1,24 @@
 package org.bardes.entities;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.MapKeyColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
-@Entity
-@Table(name = "cues")
 public class Cue implements Comparable<Cue>
 {
-	@Id
-	@Column(name = "cue", precision=8, scale=2)
 	Double cue;
 
-	@Column(length = 200)
-	String description;
-	
-	@OneToMany(fetch=FetchType.EAGER)
-	@JoinColumn(name="cue")
-	@MapKeyColumn(name="projector")
-	Map<Integer, Slide> slides;
+	private Double fadeTime;
+
+	private String description;
+
+	private Map<Integer,Slide> slides = new TreeMap<Integer, Slide>();
 
 	@Override
 	public String toString()
 	{
-		return "("+cue.toString() + slides+")";
+		return "(" + cue.toString() + slides + ")";
 	}
-	
+
 	public Double getCue()
 	{
 		return cue;
@@ -61,17 +46,11 @@ public class Cue implements Comparable<Cue>
 
 	public void setSlide(int projector, Slide slide)
 	{
-		if (slides == null)
-			slides = new HashMap<Integer, Slide>();
-		
 		slides.put(projector, slide);
 	}
-	
+
 	public Slide getSlide(int projector)
 	{
-		if (slides == null)
-			return null;
-		
 		return slides.get(projector);
 	}
 
@@ -80,16 +59,37 @@ public class Cue implements Comparable<Cue>
 	{
 		return cue.compareTo(o.cue);
 	}
-	
+
 	@Override
 	public boolean equals(Object obj)
 	{
-		return cue.equals(((Cue)obj).cue);
+		return cue.equals(((Cue) obj).cue);
 	}
-	
+
 	@Override
 	public int hashCode()
 	{
 		return cue.hashCode();
 	}
+
+	public Double getFadeTime()
+	{
+		return fadeTime;
+	}
+
+	public void setFadeTime(Double fadeTime)
+	{
+		this.fadeTime = fadeTime;
+	}
+
+	public Map<Integer, Slide> getSlides()
+	{
+		return slides;
+	}
+
+	public void setSlides(Map<Integer, Slide> slides)
+	{
+		this.slides = slides;
+	}
+
 }

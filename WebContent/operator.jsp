@@ -6,10 +6,11 @@
 <script type="text/javascript" src="mp.js"></script>
 </head>
 <body onkeydown="operatorKey(event);" onload="onLiveLoad('<%= new BodyHelper(request).webOperatorSocketURL() %>');">
-<% DB db = new DB();
+<% DB db = DB.getInstance();
 Slide def = new Slide();
 def.setContentType(Slide.Type.TRACKED);
-Show show = db.getShow(); %>
+Show show = db.getShow(); 
+db.close(); %>
 <div>
 <input type="checkbox" onclick="toggleEdit(this);" id="toggleedit"/>
 <label for="toggleedit">Show editing tools</label>

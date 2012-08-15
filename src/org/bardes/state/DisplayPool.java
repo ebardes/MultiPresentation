@@ -24,13 +24,14 @@ public class DisplayPool
 
 	public static void startup()
 	{
-		DB db = new DB();
+		DB db = DB.getInstance();
 		show = db.getShow();
 		cues = db.getCues();
-		Collections.sort(cues);
 		
 		if (currentCue == null && cues.size() > 0)
 			currentCue = cues.get(0);
+		
+		db.close();
 	}
 	
 	public static void goCue(Cue cue)
@@ -104,9 +105,8 @@ public class DisplayPool
 		threadPool.shutdownNow();
 	}
 
-	public static void refresh()
+	public static void refresh(DB db)
 	{
-		DB db = new DB();
 		cues = db.getCues();
 		Collections.sort(cues);
 		
@@ -121,12 +121,13 @@ public class DisplayPool
 		Double cueNum = Double.valueOf(split[0]);
 		int projector = Integer.valueOf(split[1]);
 		
-		DB db = new DB();
+		DB db = DB.getInstance();
 		
 		db.blankSlide(cueNum, projector);
 		
 		cues = db.getCues();
-		refresh();
+		refresh(db);
+		db.close();
 	}
 
 	public static void track(String p) 
@@ -136,12 +137,13 @@ public class DisplayPool
 		Double cueNum = Double.valueOf(split[0]);
 		int projector = Integer.valueOf(split[1]);
 		
-		DB db = new DB();
+		DB db = DB.getInstance();
 		
 		db.trackSlide(cueNum, projector);
 		
 		cues = db.getCues();
-		refresh();
+		refresh(db);
+		db.close();
 	}
 	
 	public static Collection<Cue> getCues()
@@ -175,9 +177,10 @@ public class DisplayPool
 	{
 		Double cueNum = Double.valueOf(p);
 		
-		DB db = new DB();
+		DB db = DB.getInstance();
 		db.deleteCue(cueNum);
 		cues = db.getCues();
-		refresh();
+		refresh(db);
+		db.close();
 	}
 }

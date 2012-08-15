@@ -70,9 +70,10 @@ public class FileServlet extends HttpServlet {
      */
     public void init() throws ServletException {
 
-    	DB db = new DB();
+		DB db = DB.getInstance();
     	Show show = db.getShow();
-    	
+		db.close();
+
         // Get base path (path to get all resources from) as init parameter.
         this.basePath = show.getUploadDir(); 
 

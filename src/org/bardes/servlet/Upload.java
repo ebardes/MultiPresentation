@@ -42,8 +42,10 @@ public class Upload extends HttpServlet
 			String fileName = null;
 			Double cueNum = null;
 			Integer displayNum = null;
-			DB db = new DB();
+			
+			DB db = DB.getInstance();
 			Show show = db.getShow();
+
 			Type type = Type.IMAGE;
 			File savedFile;
 			
@@ -109,8 +111,9 @@ public class Upload extends HttpServlet
 			if (displayNum != null && cueNum != null)
 			{
 				db.saveImage(cueNum, displayNum, fileName, type);
-				DisplayPool.refresh();
+				DisplayPool.refresh(db);
 			}
+			db.close();
 			
 			response.sendRedirect("operator.jsp");
 		}
