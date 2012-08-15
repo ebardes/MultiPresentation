@@ -46,10 +46,12 @@ function msg(e)
 		
 		var p = $('slideparent');
 		
-//		if (p.style.webkitTransitionDuration)
-		{
+		try {
 			p.style.webkitTransitionDuration = q;
-		}
+		} catch (e) {}
+		try {
+			p.style.MozTransitionDuration = q;
+		} catch (e) {}
 	}
 	if (e.data.startsWith('startclip:'))
 	{
