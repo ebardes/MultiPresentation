@@ -23,6 +23,7 @@ db.close(); %>
 <table class="operator">
 <tr>
 <th>Cue</th>
+<th>Time</th>
 <% for (int p = 1; p <= show.getMaxProjectors(); p++) { %><th>Projector <%= p %></th><% } %>
 <th> </th></tr>
 <%
@@ -30,6 +31,7 @@ for (Cue c : DisplayPool.getCues()) {
 	Double q = c.getCue();
 %><tr id="trq_<%=q%>">
 <td><input class="gobutton" type="button" onclick="goCue(<%= q %>);" value="Go" /> <%= q %></td>
+<td class="fadetime"><%= c.getFadeTime() %>s</td>
 <% for (int p = 1; p <= show.getMaxProjectors(); p++) { Slide s = c.getSlide(p); if (s==null) s = def;
 %><td>
 <div class="edittools">
@@ -39,7 +41,9 @@ for (Cue c : DisplayPool.getCues()) {
 <div class="thumbnail"><%= h.thumbnail(s) %></div>
 </td><%
 } %>
-<td class="edittools">
+<td class="edittools">Fade Time:
+<input type="text" size="5" onblur="setFade(<%=q%>, this)" value="<%= c.getFadeTime() %>" />
+<br/>
 <input type="button" onclick="deleteCue(<%=q%>)" value="Delete Cue <%= q %>" />
 </td>
 </tr><% } %>

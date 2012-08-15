@@ -40,6 +40,17 @@ function msg(e)
 		
 		currentCue = q;
 	}
+	if (e.data.startsWith('settime:'))
+	{
+		var q = e.data.substring(8);
+		
+		var p = $('slideparent');
+		
+//		if (p.style.webkitTransitionDuration)
+		{
+			p.style.webkitTransitionDuration = q;
+		}
+	}
 	if (e.data.startsWith('startclip:'))
 	{
 		var q = e.data.substring(10);
@@ -166,4 +177,9 @@ function toggleEdit(ctl)
 			e.style.display = mode;
 		}
 	}
+}
+
+function setFade(cue, ctl)
+{
+	new Ajax.Request("setfade/"+cue+","+ctl.value);
 }

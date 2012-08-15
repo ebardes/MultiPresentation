@@ -7,9 +7,9 @@ public class Cue implements Comparable<Cue>
 {
 	Double cue;
 
-	private Double fadeTime;
+	private Double fadeTime = 0.5;
 
-	private String description;
+	private String description = "";
 
 	private Map<Integer,Slide> slides = new TreeMap<Integer, Slide>();
 

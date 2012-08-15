@@ -14,10 +14,14 @@ body.display {
 	overflow: hidden;
 }
 
-div.slide {
+div.slideparent {
 	-webkit-transition: opacity 0.5s linear;
 	-moz-transition: opacity 0.5s linear;
-	
+}
+
+div.slide {
+	-webkit-transition: inherit;
+	-moz-transition: inherit;
 	opacity: 0;
 	position: absolute;
 	left: 0;
@@ -46,6 +50,11 @@ table.operator tr td {
 .thumbnail {
 	top: 0;
 	position: static;
+}
+
+.fadetime {
+	color: #909090;
+	font-size: smaller;
 }
 
 input.gobutton {

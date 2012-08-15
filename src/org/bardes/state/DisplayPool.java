@@ -183,4 +183,16 @@ public class DisplayPool
 		refresh(db);
 		db.close();
 	}
+
+	public static void setFadeTime(Double cueNum, Double fadeTime)
+	{
+		DB db = DB.getInstance();
+		Cue cue = db.getCue(cueNum);
+		
+		cue.setFadeTime(fadeTime);
+		
+		db.save(cue);
+		refresh(db);
+		db.close();
+	}
 }

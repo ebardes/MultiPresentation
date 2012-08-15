@@ -32,12 +32,12 @@ public class ProjectorState extends DisplayState
 			
 			if (sock != null)
 			{
+				Double fadeTime = cue.getFadeTime();
+				if (fadeTime == null)
+					fadeTime = 1.0;
+				
+				sock.send("settime:"+fadeTime+"s");
 				sock.send("changeslide:q"+cue.getCue());
-//				
-//				if (slide.getContentType() == Type.MOVIE)
-//				{
-//					sock.send("startclip:v" + slide.getId());
-//				}
 			}
 		}
 		catch (Exception e)
