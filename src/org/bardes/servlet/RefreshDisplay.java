@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.bardes.state.DB;
 import org.bardes.state.DisplayPool;
 
 @WebServlet("/refresh/*")
@@ -18,6 +19,8 @@ public class RefreshDisplay extends HttpServlet
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
 	{
-		DisplayPool.refresh();
+		DB db = DB.getInstance();
+		DisplayPool.refresh(db);
+		db.close();
 	}
 }

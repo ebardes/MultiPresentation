@@ -7,6 +7,7 @@
 </head>
 <body class="display" onload="onLiveLoad('<%= new BodyHelper(request).webDisplaySocketURL() %>');">
 <div id="info" style="display:none"></div>
+<div id="slideparent" class="slideparent">
 <%
 	int projectorId = Integer.parseInt(request.getParameter("projectorId"));
 
@@ -22,5 +23,6 @@
 	  
 %><div id="q<%= q.getCue() %>" class="slide"><%= h.slideContent(s) %></div>
 <% } %>
+</div>
 </body>
 </html>

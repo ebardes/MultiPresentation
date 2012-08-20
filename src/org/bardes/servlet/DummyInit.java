@@ -5,7 +5,6 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 
-import org.bardes.state.DB;
 import org.bardes.state.DisplayPool;
 
 @WebServlet(loadOnStartup=1, urlPatterns="/dummy")
@@ -24,7 +23,6 @@ public class DummyInit extends HttpServlet
 	@Override
 	public void destroy()
 	{
-		DB.close();
 		DisplayPool.shutdown();
 	}
 }

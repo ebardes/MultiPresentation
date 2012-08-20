@@ -6,7 +6,7 @@
     	<title>Choose Display</title>
     	<script type="text/javascript" src="prototype.js"></script>
   </head>
-  <body><% DB db = new DB(); Show show = db.getShow(); %>
+  <body><% DB db = DB.getInstance(); Show show = db.getShow(); db.close(); %>
   
   	<h1>Choose Display</h1>
   	<ul>
@@ -14,6 +14,7 @@
   		<% for (int p = 1; p <= show.getMaxProjectors(); p++) { %>
   		<li><a href="display.jsp?projectorId=<%= p %>">Live Display #<%= p %></a></li>
   		<% } %>
+  		<li><a href="setup.jsp">System Setup</a></li>
   	</ul>
   </body>
 </html> 

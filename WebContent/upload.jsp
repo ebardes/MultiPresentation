@@ -7,6 +7,10 @@
 <label for="cue">Cue: </label>
 <input id="cue" name="cue" size="10" />
 <br/>
+<label for="cue">Fade Time: </label>
+<input id="fade" name="fade" size="10" value="1.0" />
+<span>Changes fade time for all displays</span>
+<br/>
 <label for="display">Display: </label>
 <input id="display" name="display" size="10" />
 <br>

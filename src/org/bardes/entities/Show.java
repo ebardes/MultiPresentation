@@ -1,21 +1,17 @@
 package org.bardes.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 
-@Entity
-@Table(name="show")
 public class Show
 {
-	@Id int id = 1;
+	int id = 1;
 	
-	@Column(name="max_projectors")
 	private	int maxProjectors;
 
-	@Column(name="upload_dir", length=250)
 	private String uploadDir;
+	
+	public Show()
+	{
+	}
 	
 	public String getUploadDir()
 	{
