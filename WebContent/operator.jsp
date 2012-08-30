@@ -5,7 +5,7 @@
 <script type="text/javascript" src="prototype.js"></script>
 <script type="text/javascript" src="mp.js"></script>
 </head>
-<body onkeydown="operatorKey(event);" onload="onLiveLoad('<%= new BodyHelper(request).webOperatorSocketURL() %>');">
+<body onkeydown="operatorKey(event);" onload="onLiveLoad('<%= h.webOperatorSocketURL() %>');">
 <% DB db = DB.getInstance();
 Slide def = new Slide();
 def.setContentType(Slide.Type.TRACKED);
