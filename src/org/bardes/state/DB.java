@@ -5,6 +5,8 @@ import java.io.File;
 import java.util.Collection;
 import java.util.List;
 
+import javax.xml.bind.JAXBException;
+
 import org.bardes.entities.Cue;
 import org.bardes.entities.Show;
 import org.bardes.entities.Slide.Type;
@@ -23,7 +25,14 @@ public abstract class DB implements Closeable
 	
 	public static DB getInstance()
 	{
-		return new DBXML();
+		try
+		{
+			return new DBXML();
+		}
+		catch (JAXBException e)
+		{
+			throw new RuntimeException(e);
+		}
 	}
 	
 	public abstract void close();

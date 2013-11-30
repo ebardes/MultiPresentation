@@ -1,6 +1,8 @@
 package org.bardes.entities;
 
+import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement
 public class Show
 {
 	int id = 1;

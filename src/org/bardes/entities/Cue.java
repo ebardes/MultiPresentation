@@ -3,6 +3,9 @@ package org.bardes.entities;
 import java.util.Map;
 import java.util.TreeMap;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class Cue implements Comparable<Cue>
 {
 	Double cue;

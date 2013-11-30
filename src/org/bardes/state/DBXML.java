@@ -1,16 +1,18 @@
 package org.bardes.state;
 
-import java.beans.XMLDecoder;
-import java.beans.XMLEncoder;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 
 import org.bardes.entities.Cue;
 import org.bardes.entities.Show;
@@ -20,13 +22,20 @@ import org.bardes.entities.Slide.Type;
 public class DBXML extends DB
 {
 	private File cuesDir;
+	private JAXBContext jaxbContext;
+	private Marshaller marshall;
+	private Unmarshaller unmarshall;
 
-	public DBXML()
+	public DBXML() throws JAXBException
 	{
 		cuesDir = new File(baseDirectory);
 		cuesDir = new File(cuesDir, "cues");
 		if (!cuesDir.exists())
 			cuesDir.mkdirs();
+		
+		jaxbContext = JAXBContext.newInstance(Show.class, Cue.class);
+		marshall = jaxbContext.createMarshaller();
+		unmarshall = jaxbContext.createUnmarshaller();
 	}
 
 	@Override
@@ -55,10 +64,8 @@ public class DBXML extends DB
 				FileInputStream is = new FileInputStream(f);
 				try
 				{
-					XMLDecoder xmlDecoder = new XMLDecoder(is);
-					Cue cue = (Cue) xmlDecoder.readObject();
+					Cue cue = (Cue) unmarshall.unmarshal(f);
 					list.add(cue);
-					xmlDecoder.close();
 				}
 				finally
 				{
@@ -78,16 +85,18 @@ public class DBXML extends DB
 	public void save(Cue c)
 	{
 		File f = fileForCue(c.getCue());
+		persist(c,f);
+	}
+	
+	private void persist(Object obj, File dest)
+	{
 		try
 		{
-			FileOutputStream os = new FileOutputStream(f);
-			XMLEncoder encoder = new XMLEncoder(os);
-			encoder.writeObject(c);
-			encoder.close();
+			marshall.marshal(obj, dest);
 		}
-		catch (Exception e)
+		catch (JAXBException e)
 		{
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -100,17 +109,7 @@ public class DBXML extends DB
 	public void save(Show show)
 	{
 		File f = new File(baseDirectory, "show.xml");
-		try
-		{
-			FileOutputStream os = new FileOutputStream(f);
-			XMLEncoder encoder = new XMLEncoder(os);
-			encoder.writeObject(show);
-			encoder.close();
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
+		persist(show, f);
 	}
 
 	@Override
@@ -126,14 +125,18 @@ public class DBXML extends DB
 	public Show getShow()
 	{
 		File f = new File(baseDirectory, "show.xml");
+		if (!f.exists())
+		{
+			Show s = new Show();
+			s.setMaxProjectors(3);
+			s.setUploadDir("/Users/eric/mp/images");
+			save(s);
+			return s;
+		}
+		
 		try
 		{
-			FileInputStream is = new FileInputStream(f);
-			XMLDecoder decoder = new XMLDecoder(is);
-			Show show = (Show) decoder.readObject();
-			decoder.close();
-			is.close();
-			
+			Show show = (Show) unmarshall.unmarshal(f);
 			return show;
 		}
 		catch (Exception e)
@@ -149,12 +152,7 @@ public class DBXML extends DB
 		File f = fileForCue(cueNum);
 		try
 		{
-			FileInputStream is = new FileInputStream(f);
-			XMLDecoder decoder = new XMLDecoder(is);
-			Cue cue = (Cue) decoder.readObject();
-			decoder.close();
-			is.close();
-			
+			Cue cue = (Cue) unmarshall.unmarshal(f);
 			return cue;
 		}
 		catch (Exception e)
