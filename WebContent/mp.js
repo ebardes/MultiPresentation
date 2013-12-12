@@ -77,6 +77,7 @@ function msg(e)
 		{
 			var tr = document.getElementById('trq_'+q);
 			tr.style.backgroundColor = '#300050';
+			tr.scrollIntoView();
 			
 			try
 			{
@@ -138,6 +139,14 @@ function operatorKey(event)
 		goCue('prev');
 		event.bubbles = false;
 	}
+	else if (event.keyCode == 69 /* letter e */)
+	{
+		var ctl = document.getElementById("toggleedit");
+		ctl.checked = ! ctl.checked;
+		toggleEdit(ctl);
+		event.bubbles = false;
+	}
+	return event.bubbles;
 }
 
 function hide(id)
