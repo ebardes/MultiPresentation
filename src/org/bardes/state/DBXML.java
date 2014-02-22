@@ -165,8 +165,8 @@ public class DBXML extends DB
 	@Override
 	public void saveImage(Double cueNum, int displayNum, String fileName, Type type, Double fadeTime)
 	{
-		Cue cue = new Cue();
-		cue.setCue(cueNum);
+		Cue cue = loadCue(cueNum);
+		
 		cue.setFadeTime(fadeTime);
 		
 		Slide slide = new Slide();
@@ -177,11 +177,26 @@ public class DBXML extends DB
 		save(cue);
 	}
 
+	private Cue loadCue(Double cueNum)
+	{
+		Cue cue = null;
+		for (Cue c : getCues())
+		{
+			if (c.getCue().equals(cueNum))
+				cue = c;
+		}
+		if (cue == null)
+		{
+			cue = new Cue();
+			cue.setCue(cueNum);
+		}
+		return cue;
+	}
+
 	@Override
 	public void blankSlide(Double cueNum, int projector)
 	{
-		Cue cue = new Cue();
-		cue.setCue(cueNum);
+		Cue cue = loadCue(cueNum);
 		Slide slide = new Slide();
 		slide.setContentFile(null);
 		slide.setContentType(Type.BLANK);
@@ -193,8 +208,7 @@ public class DBXML extends DB
 	@Override
 	public void trackSlide(Double cueNum, int projector)
 	{
-		Cue cue = new Cue();
-		cue.setCue(cueNum);
+		Cue cue = loadCue(cueNum);
 		Slide slide = new Slide();
 		slide.setContentFile(null);
 		slide.setContentType(Type.TRACKED);
